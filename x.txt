@@ -1,0 +1,257 @@
+==================== PRACTICAL 1 ====================
+EDA and Classification on Pokemon Dataset
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+
+df = pd.read_csv('pokemon.csv')
+
+# Basic EDA
+
+print(df.head())
+print(df.info())
+print(df.describe())
+
+# Handle missing values
+
+df['type2'].fillna('None', inplace=True)
+df['height_m'].fillna(df['height_m'].mean(), inplace=True)
+df['weight_kg'].fillna(df['weight_kg'].mean(), inplace=True)
+df['percentage_male'].fillna(df['percentage_male'].median(), inplace=True)
+
+# Visualization
+
+sns.boxplot(x='type1', y='attack', data=df)
+plt.xticks(rotation=90)
+plt.show()
+
+sns.scatterplot(x='height_m', y='weight_kg', data=df)
+plt.show()
+
+# Encoding
+
+le = LabelEncoder()
+df['type1'] = le.fit_transform(df['type1'])
+
+# Model
+
+X = df[['hp','attack','defense','speed','sp_attack','sp_defense']]
+y = df['is_legendary']
+
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+
+model = RandomForestClassifier()
+model.fit(X_train,y_train)
+
+y_pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test,y_pred))
+
+==================== PRACTICAL 2 ====================
+EDA and Linear Regression on Housing Dataset
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
+# Load dataset
+
+df = pd.read_csv('Housing.csv')
+
+# EDA
+
+print(df.info())
+print(df.describe())
+
+# Visualization
+
+sns.scatterplot(x='area', y='price', data=df)
+plt.show()
+
+# Model
+
+X = df[['area']]
+y = df['price']
+
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+
+model = LinearRegression()
+model.fit(X_train,y_train)
+
+y_pred = model.predict(X_test)
+
+plt.scatter(X_test,y_test)
+plt.plot(X_test,y_pred)
+plt.show()
+
+==================== PRACTICAL 3,4,5 ====================
+Weather Forecasting using KNN, SVM, Logistic Regression
+
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+
+df = pd.read_csv('weather_forecast_data.csv')
+
+# Create target
+
+df['Rain'] = np.where((df['humidity']>70)&(df['cloud']>60),1,0)
+
+X = df[['max','min','wind','humidity','cloud','pressure']]
+y = df['Rain']
+
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# KNN
+
+knn = KNeighborsClassifier()
+knn.fit(X_train,y_train)
+print("KNN:", accuracy_score(y_test,knn.predict(X_test)))
+
+# SVM
+
+svm = SVC()
+svm.fit(X_train,y_train)
+print("SVM:", accuracy_score(y_test,svm.predict(X_test)))
+
+# Logistic
+
+lr = LogisticRegression()
+lr.fit(X_train,y_train)
+print("Logistic:", accuracy_score(y_test,lr.predict(X_test)))
+
+==================== PRACTICAL 6 ====================
+Linear Regression using Gradient Descent
+
+import numpy as np
+import pandas as pd
+
+# Load dataset
+
+df = pd.read_csv('Housing.csv')
+
+x = df[['area']].values
+y = df['price'].values
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+x = sc.fit_transform(x)
+
+y = y.reshape(-1,1)
+y = (y - y.mean())/y.std()
+
+m,n = x.shape
+w = np.zeros((n,1))
+b = 0
+
+lr = 0.001
+epochs = 1000
+
+for i in range(epochs):
+y_pred = np.dot(x,w)+b
+dw = (1/m)*np.dot(x.T,(y_pred-y))
+db = (1/m)*np.sum(y_pred-y)
+w -= lr*dw
+b -= lr*db
+
+print("Weights:",w)
+print("Bias:",b)
+
+==================== PRACTICAL 7 ====================
+Fibonacci (Recursive)
+
+def fibonacci(n):
+if n<=1:
+return n
+return fibonacci(n-1)+fibonacci(n-2)
+
+n = int(input("Enter n: "))
+for i in range(n):
+print(fibonacci(i), end=" ")
+
+==================== PRACTICAL 8 ====================
+Random Search on Iris Dataset
+
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Load data
+
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+
+best_acc = 0
+best_k = 0
+
+for i in range(20):
+k = np.random.randint(1,20)
+model = KNeighborsClassifier(n_neighbors=k)
+model.fit(X_train,y_train)
+acc = accuracy_score(y_test,model.predict(X_test))
+
+```
+if acc > best_acc:
+    best_acc = acc
+    best_k = k
+```
+
+print("Best K:", best_k)
+print("Best Accuracy:", best_acc)
+
+==================== PRACTICAL 9 ====================
+Fraud Detection
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# Load dataset
+
+df = pd.read_csv('creditcard.csv')
+
+X = df.drop('Class',axis=1)
+y = df['Class']
+
+scaler = StandardScaler()
+X['Amount'] = scaler.fit_transform(X[['Amount']])
+
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train,y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test,y_pred))
+print(confusion_matrix(y_test,y_pred))
+print(classification_report(y_test,y_pred))

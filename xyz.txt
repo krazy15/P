@@ -1,0 +1,1314 @@
+
+
+==================== FRAUD DETECTION ====================
+
+import numpy as np
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+df = pd.read_csv("creditcard.csv")
+
+df.head()
+
+df.info()
+
+#Check fraud distribution:
+
+df['Class'].value_counts()
+
+X = df.drop(columns='Class', axis=1)
+y = df['Class']
+
+scaler = StandardScaler()
+
+X['Amount'] = scaler.fit_transform(X[['Amount']])
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = LogisticRegression(max_iter=1000)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+# Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Accuracy:", accuracy)
+
+# Confusion Matrix
+print(confusion_matrix(y_test, y_pred))
+
+# Classification Report
+print(classification_report(y_test, y_pred))
+
+
+
+====================Implement a basic SVM classifier using Python and NumPy without kernel functions. ====================
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.metrics import confusion_matrix, classification_report
+
+data = datasets.load_breast_cancer()
+X = data.data
+y = data.target
+
+print("Shape of X:", X.shape)
+print("Classes:", np.unique(y))
+
+plt.figure()
+sns.histplot(X[:, 0], kde=True)
+plt.title("Feature Distribution (Mean Radius)")
+plt.show()
+
+y = np.where(y == 0, -1, 1)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_train)
+
+plt.figure()
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y_train)
+plt.title("PCA Projection (2D Visualization)")
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+plt.show()
+
+class SVM:
+    def __init__(self, learning_rate=0.001, lambda_param=0.01, n_iters=1000):
+        self.lr = learning_rate
+        self.lambda_param = lambda_param
+        self.n_iters = n_iters
+
+    def fit(self, X, y):
+        n_samples, n_features = X.shape
+
+        self.w = np.zeros(n_features)
+        self.b = 0
+
+        self.losses = []
+
+        for _ in range(self.n_iters):
+            loss = 0
+            for idx, x_i in enumerate(X):
+                condition = y[idx] * (np.dot(x_i, self.w) - self.b) >= 1
+
+                if condition:
+                    self.w -= self.lr * (2 * self.lambda_param * self.w)
+                else:
+                    self.w -= self.lr * (2 * self.lambda_param * self.w - np.dot(x_i, y[idx]))
+                    self.b -= self.lr * y[idx]
+                    loss += 1 - y[idx] * (np.dot(x_i, self.w) - self.b)
+
+            self.losses.append(loss)
+
+    def predict(self, X):
+        linear_output = np.dot(X, self.w) - self.b
+        return np.sign(linear_output)
+
+model = SVM()
+model.fit(X_train, y_train)
+
+plt.figure()
+plt.plot(model.losses)
+plt.title("Training Loss Curve")
+plt.xlabel("Iterations")
+plt.ylabel("Loss")
+plt.show()
+
+predictions = model.predict(X_test)
+
+accuracy = np.mean(predictions == y_test)
+print("Accuracy:", accuracy)
+
+cm = confusion_matrix(y_test, predictions)
+
+plt.figure()
+sns.heatmap(cm, annot=True, fmt='d')
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()
+
+print(classification_report(y_test, predictions))
+
+# Reduce test data to 2D
+X_test_pca = pca.transform(X_test)
+
+# Create grid
+x_min, x_max = X_test_pca[:, 0].min() - 1, X_test_pca[:, 0].max() + 1
+y_min, y_max = X_test_pca[:, 1].min() - 1, X_test_pca[:, 1].max() + 1
+
+xx, yy = np.meshgrid(
+    np.linspace(x_min, x_max, 100),
+    np.linspace(y_min, y_max, 100)
+)
+
+grid = np.c_[xx.ravel(), yy.ravel()]
+
+# Convert grid back to original feature space
+grid_original = pca.inverse_transform(grid)
+
+Z = model.predict(grid_original)
+Z = Z.reshape(xx.shape)
+
+plt.figure()
+plt.contourf(xx, yy, Z, alpha=0.3)
+plt.scatter(X_test_pca[:, 0], X_test_pca[:, 1], c=y_test)
+plt.title("Decision Boundary (PCA Reduced)")
+plt.show()
+
+
+
+==================== Train the SVM classifier on a synthetic dataset with two classes. ====================
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+np.random.seed(42)
+
+# Class -1
+X1 = np.random.randn(50, 2) + np.array([-2, -2])
+y1 = -1 * np.ones(50)
+
+# Class +1
+X2 = np.random.randn(50, 2) + np.array([2, 2])
+y2 = np.ones(50)
+
+# Combine
+X = np.vstack((X1, X2))
+y = np.hstack((y1, y2))
+
+print("Dataset shape:", X.shape)
+
+plt.figure()
+plt.scatter(X[:, 0], X[:, 1], c=y)
+plt.title("Synthetic Dataset")
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.show()
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+class SVM:
+    def __init__(self, learning_rate=0.001, lambda_param=0.01, n_iters=1000):
+        self.lr = learning_rate
+        self.lambda_param = lambda_param
+        self.n_iters = n_iters
+
+    def fit(self, X, y):
+        n_samples, n_features = X.shape
+
+        self.w = np.zeros(n_features)
+        self.b = 0
+
+        self.losses = []
+
+        for _ in range(self.n_iters):
+            loss = 0
+            for idx, x_i in enumerate(X):
+                condition = y[idx] * (np.dot(x_i, self.w) - self.b) >= 1
+
+                if condition:
+                    self.w -= self.lr * (2 * self.lambda_param * self.w)
+                else:
+                    self.w -= self.lr * (2 * self.lambda_param * self.w - np.dot(x_i, y[idx]))
+                    self.b -= self.lr * y[idx]
+                    loss += 1 - y[idx] * (np.dot(x_i, self.w) - self.b)
+
+            self.losses.append(loss)
+
+    def predict(self, X):
+        return np.sign(np.dot(X, self.w) - self.b)
+
+model = SVM()
+model.fit(X_train, y_train)
+
+plt.figure()
+plt.plot(model.losses)
+plt.title("Loss Curve")
+plt.xlabel("Iterations")
+plt.ylabel("Loss")
+plt.show()
+
+predictions = model.predict(X_test)
+
+accuracy = np.mean(predictions == y_test)
+print("Accuracy:", accuracy)
+
+def plot_decision_boundary(X, y, model):
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+
+    xx, yy = np.meshgrid(
+        np.linspace(x_min, x_max, 100),
+        np.linspace(y_min, y_max, 100)
+    )
+
+    grid = np.c_[xx.ravel(), yy.ravel()]
+    Z = model.predict(grid)
+    Z = Z.reshape(xx.shape)
+
+    plt.figure()
+    plt.contourf(xx, yy, Z, alpha=0.3)
+    plt.scatter(X[:, 0], X[:, 1], c=y)
+    plt.title("Decision Boundary")
+    plt.show()
+
+plot_decision_boundary(X_test, y_test, model)
+
+from sklearn.metrics import confusion_matrix
+
+cm = confusion_matrix(y_test, predictions)
+
+plt.figure()
+sns.heatmap(cm, annot=True, fmt='d')
+plt.title("Confusion Matrix")
+plt.show()
+
+
+
+==================== Implement the DE/rand/1/bin strategy to solve a constrained optimization problem. a constrained optimization problem.	 ====================
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+def objective(x):
+    return x[0]**2 + x[1]**2
+
+def constraint_violation(x):
+    g = x[0] + x[1] - 1
+    return max(0, g)
+
+def compare(x1, x2):
+    f1, f2 = objective(x1), objective(x2)
+    v1, v2 = constraint_violation(x1), constraint_violation(x2)
+
+    if v1 == 0 and v2 > 0:
+        return x1
+    if v2 == 0 and v1 > 0:
+        return x2
+
+    if v1 == 0 and v2 == 0:
+        return x1 if f1 < f2 else x2
+
+    return x1 if v1 < v2 else x2
+
+def initialize_population(pop_size, dim, bounds):
+    pop = np.random.rand(pop_size, dim)
+    for i in range(dim):
+        pop[:, i] = bounds[i][0] + pop[:, i] * (bounds[i][1] - bounds[i][0])
+    return pop
+
+def differential_evolution(pop_size=20, dim=2, F=0.8, CR=0.9, generations=100):
+    bounds = [(-5, 5), (-5, 5)]
+    pop = initialize_population(pop_size, dim, bounds)
+
+    best_history = []
+
+    for gen in range(generations):
+        new_pop = np.copy(pop)
+
+        for i in range(pop_size):
+            idxs = list(range(pop_size))
+            idxs.remove(i)
+            r1, r2, r3 = np.random.choice(idxs, 3, replace=False)
+
+            # Mutation
+            v = pop[r1] + F * (pop[r2] - pop[r3])
+
+            # Boundary control
+            v = np.clip(v, -5, 5)
+
+            # Crossover
+            u = np.copy(pop[i])
+            j_rand = np.random.randint(dim)
+
+            for j in range(dim):
+                if np.random.rand() < CR or j == j_rand:
+                    u[j] = v[j]
+
+            # Selection
+            new_pop[i] = compare(u, pop[i])
+
+        pop = new_pop
+
+        best = min(pop, key=lambda x: (constraint_violation(x), objective(x)))
+        best_history.append(objective(best))
+
+    return best, best_history
+
+best_solution, history = differential_evolution()
+
+print("Best Solution:", best_solution)
+print("Best Objective Value:", objective(best_solution))
+print("Constraint Violation:", constraint_violation(best_solution))
+
+plt.plot(history)
+plt.title("Convergence Curve")
+plt.xlabel("Generations")
+plt.ylabel("Best Fitness")
+plt.grid()
+plt.show()
+
+
+
+==================== Implementation of Bacteria Foraging ====================
+
+# Import required libraries
+import numpy as np
+import pandas as pd
+import random
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+
+# Load Iris dataset
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+# Convert to dataframe for better understanding
+df = pd.DataFrame(X, columns=iris.feature_names)
+df['species'] = y
+
+df.head()
+
+# Normalize the dataset
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Fitness function (minimize error)
+
+def fitness_function(position):
+
+    # simple fitness calculation using sum of squares
+    fitness = np.sum(position**2)
+
+    return fitness
+
+# Bacteria parameters
+num_bacteria = 10
+dimension = 4
+
+# Initialize bacteria randomly
+bacteria = np.random.uniform(-1, 1, (num_bacteria, dimension))
+
+# Chemotaxis steps
+num_steps = 20
+
+for step in range(num_steps):
+
+    for i in range(num_bacteria):
+
+        # Random direction
+        direction = np.random.uniform(-1, 1, dimension)
+
+        # Move bacterium
+        new_position = bacteria[i] + 0.1 * direction
+
+        # Evaluate fitness
+        if fitness_function(new_position) < fitness_function(bacteria[i]):
+            bacteria[i] = new_position
+
+# Find best bacterium
+best_bacterium = min(bacteria, key=fitness_function)
+
+print("Best Solution:", best_bacterium)
+print("Best Fitness:", fitness_function(best_bacterium))
+
+
+
+==================== Particle Swarm Optimization ====================
+
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+
+# Load Iris dataset
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+# Convert to DataFrame
+df = pd.DataFrame(X, columns=iris.feature_names)
+df["species"] = y
+
+df.head()
+
+# Normalize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Fitness function
+
+def fitness_function(position):
+
+    # Simple fitness calculation
+    return np.sum(position**2)
+
+# PSO parameters
+num_particles = 10
+dimension = 4
+iterations = 30
+
+# Initialize particle positions
+particles = np.random.uniform(-1, 1, (num_particles, dimension))
+
+# Initialize velocity
+velocity = np.zeros((num_particles, dimension))
+
+# Personal best
+pbest = particles.copy()
+pbest_fitness = np.array([fitness_function(p) for p in particles])
+
+# Global best
+gbest = pbest[np.argmin(pbest_fitness)]
+
+# PSO parameters
+w = 0.5
+c1 = 1.5
+c2 = 1.5
+
+for i in range(iterations):
+
+    for j in range(num_particles):
+
+        r1 = np.random.rand()
+        r2 = np.random.rand()
+
+        # Update velocity
+        velocity[j] = (
+            w * velocity[j]
+            + c1 * r1 * (pbest[j] - particles[j])
+            + c2 * r2 * (gbest - particles[j])
+        )
+
+        # Update position
+        particles[j] = particles[j] + velocity[j]
+
+        # Evaluate fitness
+        fitness = fitness_function(particles[j])
+
+        # Update personal best
+        if fitness < pbest_fitness[j]:
+            pbest[j] = particles[j]
+            pbest_fitness[j] = fitness
+
+    # Update global best
+    gbest = pbest[np.argmin(pbest_fitness)]
+
+print("Best Position Found:", gbest)
+print("Best Fitness Value:", fitness_function(gbest))
+
+
+
+==================== Univariate methods Ant colony optimization ====================
+
+# Import required libraries
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+
+iris = load_iris()
+
+X = iris.data
+y = iris.target
+
+df = pd.DataFrame(X, columns=iris.feature_names)
+df["species"] = y
+
+df.head()
+
+# Normalize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Fitness function
+def fitness_function(solution):
+
+    # simple cost function
+    return np.sum(solution**2)
+
+num_ants = 20
+dimension = 4
+iterations = 80
+
+# smaller initialization range
+ants = np.random.uniform(-1, 1, (num_ants, dimension))
+
+pheromone = np.ones((num_ants, dimension))
+
+evaporation_rate = 0.2
+alpha = 0.6
+step_size = 0.05
+
+for i in range(iterations):
+
+    fitness_values = np.array([fitness_function(a) for a in ants])
+
+    best_index = np.argmin(fitness_values)
+    best_ant = ants[best_index]
+    best_fitness = fitness_values[best_index]
+
+    # pheromone reinforcement based on fitness
+    pheromone = (1 - evaporation_rate) * pheromone
+    pheromone += alpha / (1 + best_fitness)
+
+    # move ants toward best solution
+    ants = ants + step_size * pheromone * (best_ant - ants)
+
+    # keep ants in safe range
+    ants = np.clip(ants, -2, 2)
+
+fitness_values = np.array([fitness_function(a) for a in ants])
+
+best_solution = ants[np.argmin(fitness_values)]
+
+print("Best Solution:", best_solution)
+print("Best Fitness:", fitness_function(best_solution))
+
+
+
+==================== Implementation of Linear Regression using Gradient Descent ====================
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+!pip install ydata-profiling
+from ydata_profiling import ProfileReport
+
+df =  pd.read_csv('Housing.csv')
+
+profile = ProfileReport(df, title='Housing Data Profiling Report', explorative=True)
+profile.to_file('housing_report.html')
+
+profile
+
+df.isnull().sum()
+
+df = df.dropna()
+
+x = df[['area']].values
+y = df['price'].values
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+x = sc.fit_transform(x)
+
+m, n = x.shape
+w = np.zeros((n, 1))
+b = 0
+
+learning_rate = 0.01
+num_iterations = 1000
+
+def compute_cost(x, y, w, b):
+    m = len(y)
+    predictions = np.dot(x, w) + b
+    cost = (1 / (2 * m)) * np.sum((predictions - y) ** 2)
+    return cost
+
+def gradient_descent(x, y, w, b, learning_rate, iterations):
+    m = len(y)
+    cost_history = []
+
+    # Ensure y is a 2D array (column vector) for consistent broadcasting with predictions
+    y = y.reshape(-1, 1)
+
+    for i in range(iterations):
+        predictions = np.dot(x, w) + b
+
+        dw = (1 / m) * np.dot(x.T, (predictions - y))
+        db = (1 / m) * np.sum(predictions - y)
+
+        w -= learning_rate * dw
+        b -= learning_rate * db # Corrected typo here
+
+        cost = compute_cost(x, y, w, b)
+        cost_history.append(cost)
+
+    return w, b, cost_history # Moved return statement outside the loop
+
+w, b, cost_history = gradient_descent(x, y, w, b, learning_rate, num_iterations)
+
+print("Final Weight:", w)
+print("Final Bias:", b)
+
+plt.plot(cost_history)
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.title('Cost Reduction over iterartions')
+plt.show()
+
+predictions = np.dot(x, w) + b
+
+plt.figure(figsize=(8, 6))
+
+sns.regplot(
+    x='area',
+    y='price',
+    data=df,
+    scatter_kws={'alpha':0.6},  # transparency of points
+    line_kws={'color':'red'}    #trend line color
+)
+
+plt.title('Price vs Area with linear trend line')
+plt.xlabel('Area')
+plt.ylabel('Price')
+plt.show()
+
+from sklearn.metrics import mean_squared_error, r2_score
+
+mse = mean_squared_error(y, predictions)
+r2 = r2_score(y, predictions)
+
+print("MSE:", mse)
+print("R2:", r2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================== EDA and Performance against Other Types, Height, Weight, Classification of Pokemon dataset ====================
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df=pd.read_csv('Housing.csv')
+
+df.head()
+
+df.tail()
+
+df.info()
+
+df.describe()
+
+df.shape
+
+df
+
+df.drop_duplicates(inplace=True)
+
+df
+
+df.dtypes
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='area', y='price', data=df)
+plt.title('Price vs. Area')
+plt.xlabel('Area')
+plt.ylabel('Price')
+plt.grid(True)
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='bedrooms', y='price', data=df)
+plt.title('Price vs. Bedrooms')
+plt.xlabel('Bedrooms')
+plt.ylabel('Price')
+plt.grid(True)
+
+df.mean(numeric_only=True)
+
+plt.figure(figsize=(10, 6))
+sns.regplot(x='area', y='price', data=df, line_kws={'color':'red'})
+plt.title('Price vs. Area with Linear Trend Line')
+plt.xlabel('Area')
+plt.ylabel('Price')
+plt.grid(True)
+plt.show()
+
+Q1 = df['price'].quantile(0.25)
+Q3 = df['price'].quantile(0.75)
+
+IQR = Q3 - Q1
+
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+outliers = df[(df['price'] < lower_bound) | (df['price'] > upper_bound)]
+
+print(f"Number of outliers detected in 'price': {len(outliers)}")
+print("Outliers in 'price':")
+
+# Filter out the outliers from the original DataFrame
+df_cleaned = df[~((df['price'] < lower_bound) | (df['price'] > upper_bound))]
+
+print(f"Original DataFrame shape: {df.shape}")
+print(f"Cleaned DataFrame shape: {df_cleaned.shape}")
+
+# Display the head of the cleaned DataFrame to verify
+print("\nHead of cleaned DataFrame:")
+print(df_cleaned.head())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+====================	Data exploration & visualization with calculating the trend line (LINEAR REGRESSION), removing outliers of house selling dataset ====================
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+data = pd.read_csv('/content/pokemon.csv')
+
+data
+
+data.head()
+
+data.info()
+
+data.size
+
+data.isnull().sum()
+
+data['is_legendary'].value_counts()
+
+#Pokémon Classification (Legendary vs Non-Legendary)
+sns.countplot(x='is_legendary', data=data)
+plt.title("Legendary vs Non-Legendary Pokémon")
+plt.show()
+
+#Distribution of Height
+plt.figure(figsize=(8,5))
+sns.histplot(data['height_m'],bins=30,kde=True)
+plt.title("height distrubition of pokemon")
+x_label = "height(meters)"
+plt.show()
+
+#Distribution of Weight
+plt.figure(figsize=(8,5))
+sns.histplot(data['weight_kg'],bins=30,kde=True)
+plt.title("weight distribution in pokemon")
+plt.xlabel("weight(kilograms)")
+plt.show()
+
+#Height & Weight vs Legendary Status
+plt.figure(figsize=(8,5))
+sns.boxplot(x="is_legendary",y="height_m",data=data)
+plt.title("height vs Legendary status")
+plt.show()
+
+plt.figure(figsize=(8,5))
+sns.boxplot(x='is_legendary', y='weight_kg', data=data)
+plt.title("Weight vs is_legendary Status")
+plt.show()
+
+#Pokémon Types Distribution
+data['type1'].value_counts()
+
+plt.figure(figsize=(12,6))
+sns.countplot(x='type1', data=data, order=data['type1'].value_counts().index)
+plt.xticks(rotation=45)
+plt.title("Distribution of Primary Pokémon Types")
+plt.show()
+
+#Performance Analysis (Stats Comparison)
+data['Total_Power'] = (
+    data['hp'] +
+    data['attack'] +
+    data['defense'] +
+    data['sp_attack'] +
+    data['sp_defense'] +
+    data['speed']
+)
+type_performance = data.groupby('type1')['Total_Power'].mean().sort_values(ascending=False)
+type_performance
+
+#Performance by Pokémon Type
+type_performance = data.groupby('type1')['Total_Power'].mean().sort_values(ascending=False)
+type_performance
+
+plt.figure(figsize=(12,6))
+type_performance.plot(kind='bar')
+plt.title("Average Performance (Total Power) by Type")
+plt.ylabel("Average Total Power")
+plt.show()
+
+#Correlation Between Height, Weight & Power
+corr_features = data[['height_m', 'weight_kg', 'Total_Power']]
+corr_features.corr()
+
+sns.heatmap(corr_features.corr(), annot=True, cmap='coolwarm')
+plt.title("Correlation Matrix")
+plt.show()
+
+#Generation-wise Classification
+sns.countplot(x='generation', data=data)
+plt.title("Pokémon Count per Generation")
+plt.show()
+
+#battle
+battle_data = data[['name', 'type1', 'hp', 'attack', 'defense',
+                     'sp_attack', 'sp_defense', 'speed']].copy()
+battle_data['Total_Power'] = (
+    battle_data['hp'] +
+    battle_data['attack'] +
+    battle_data['defense'] +
+    battle_data['sp_attack'] +
+    battle_data['sp_defense'] +
+    battle_data['speed']
+)
+
+#Shuffle Pokémon Randomly
+battle_data = battle_data.sample(frac=1, random_state=None).reset_index(drop=True)
+
+#Split into Two Random Groups
+mid = len(battle_data) // 2
+
+group_A = battle_data.iloc[:mid]
+group_B = battle_data.iloc[mid:]
+print("Group A size:", len(group_A))
+print("Group B size:", len(group_B))
+
+#Define Fight Function
+import random
+
+def pokemon_fight(poke1, poke2):
+    score1 = poke1['Total_Power'] * random.uniform(0.8, 1.2)
+    score2 = poke2['Total_Power'] * random.uniform(0.8, 1.2)
+
+    if score1 > score2:
+        return poke1['name'], poke1['type1']
+    else:
+        return poke2['name'], poke2['type1']
+
+#run battle
+wins = []
+
+for i in range(min(len(group_A), len(group_B))):
+    winner_name, winner_type = pokemon_fight(group_A.iloc[i], group_B.iloc[i])
+    wins.append(winner_type)
+win_results = pd.Series(wins).value_counts()
+win_results
+
+
+#Visualize Battle Results
+plt.figure(figsize=(12,6))
+win_results.plot(kind='bar')
+plt.title("Battle Wins by Pokémon Type (Random Battles)")
+plt.ylabel("Number of Wins")
+plt.xlabel("Type")
+plt.show()
+
+
+#Declare Overall Winning Group
+group_A_power = group_A['Total_Power'].sum()
+group_B_power = group_B['Total_Power'].sum()
+
+if group_A_power > group_B_power:
+    print("Group A is stronger overall")
+else:
+    print("Group B is stronger overall")
+
+#Sample Battle Output
+for i in range(5):
+    p1 = group_A.iloc[i]
+    p2 = group_B.iloc[i]
+    winner, t = pokemon_fight(p1, p2)
+    print(f"{p1['name']} vs {p2['name']} → Winner: {winner} ({t})")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================== 	weather forcasting using various KNN, SVM and logistic regression ====================
+
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
+
+df = pd.read_csv("/content/weather.csv (1).zip")
+
+print(df.head())
+
+
+print(df.tail())
+
+print(df.info())
+
+print(df.describe())
+
+# Simple rule-based target (example)
+df['Rain'] = np.where(
+    (df['humidi'] > 70) & (df['cloud'] > 60),
+    1, 0
+)
+
+print(df['Rain'].value_counts())
+
+X = df[['max', 'min', 'wind', 'humidi', 'cloud', 'pressure']]
+y = df['Rain']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+scaler = StandardScaler()
+
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+knn = KNeighborsClassifier(n_neighbors=5)
+
+knn.fit(X_train, y_train)
+y_pred_knn = knn.predict(X_test)
+
+print("KNN Accuracy:", accuracy_score(y_test, y_pred_knn))
+print(classification_report(y_test, y_pred_knn))
+
+
+svm = SVC(kernel='rbf', C=1, gamma='scale')
+
+svm.fit(X_train, y_train)
+y_pred_svm = svm.predict(X_test)
+
+print("SVM Accuracy:", accuracy_score(y_test, y_pred_svm))
+print(classification_report(y_test, y_pred_svm))
+
+
+lr = LogisticRegression()
+
+lr.fit(X_train, y_train)
+y_pred_lr = lr.predict(X_test)
+
+print("Logistic Regression Accuracy:", accuracy_score(y_test, y_pred_lr))
+print(classification_report(y_test, y_pred_lr))
+
+
+results = pd.DataFrame({
+    "Model": ["KNN", "SVM", "Logistic Regression"],
+    "Accuracy": [
+        accuracy_score(y_test, y_pred_knn),
+        accuracy_score(y_test, y_pred_svm),
+        accuracy_score(y_test, y_pred_lr)
+    ]
+})
+
+print(results)
+
+
+
+
+==================== Implementation of Unrestricted Search methods ====================
+
+from collections import deque
+
+def bfs(graph, start):
+    visited = set()          # To keep track of visited nodes
+    queue = deque([start])   # Initialize queue with start node
+
+    visited.add(start)
+
+    while queue:
+        node = queue.popleft()
+        print(node, end=" ")
+
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+
+
+# Example graph (Adjacency List)
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+
+bfs(graph, 'A')
+
+
+
+==================== Implementation of Fibonacci Method ====================
+
+def fibonacci(n):
+    # Base condition
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    # Recursive case
+    else:
+        return fibonacci(n - 1) + fibonacci(n - 2)
+
+# Taking input from user
+n = int(input("Enter number of terms: "))
+
+print("Fibonacci Series:")
+
+for i in range(n):
+    print(fibonacci(i), end=" ")
+
+
+
+==================== 	Implementation of Bacteria Foraging ====================
+
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+
+
+# Load Iris dataset
+data = load_iris()
+X = data.data
+y = data.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Feature scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+
+# Fitness function (classification error)
+def fitness(weights):
+    weights = weights.reshape(X_train.shape[1], 3)
+    scores = np.dot(X_train, weights)
+    preds = np.argmax(scores, axis=1)
+    error = np.mean(preds != y_train)
+    return error
+
+
+# BFO parameters
+S = 20     # number of bacteria
+Nc = 30    # chemotaxis steps
+Ns = 4     # swim length
+Nre = 4    # reproduction steps
+Ped = 0.25 # elimination probability
+dim = X_train.shape[1] * 3
+
+# Initialize bacteria
+bacteria = np.random.uniform(-1, 1, (S, dim))
+health = np.zeros(S)
+
+for repro in range(Nre):
+    for j in range(Nc):
+
+        for i in range(S):
+
+            cost = fitness(bacteria[i])
+            health[i] += cost
+
+            # tumble
+            direction = np.random.randn(dim)
+            direction = direction / np.linalg.norm(direction)
+
+            new_pos = bacteria[i] + 0.1 * direction
+            new_cost = fitness(new_pos)
+
+            swim = 0
+            while new_cost < cost and swim < Ns:
+                bacteria[i] = new_pos
+                cost = new_cost
+                new_pos = bacteria[i] + 0.1 * direction
+                new_cost = fitness(new_pos)
+                swim += 1
+
+# Best solution
+best = bacteria[0]
+weights = best.reshape(X_train.shape[1], 3)
+
+# Test prediction
+scores = np.dot(X_test, weights)
+preds = np.argmax(scores, axis=1)
+
+accuracy = accuracy_score(y_test, preds)
+print("Accuracy:", accuracy)
+
+
+
+==================== Particle Swarm Optimization ====================
+
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+
+
+
+# Load Iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+
+def fitness(weights):
+    weights = weights.reshape(X_train.shape[1], 3)
+    scores = np.dot(X_train, weights)
+    preds = np.argmax(scores, axis=1)
+    error = np.mean(preds != y_train)
+    return error
+
+
+# PSO parameters
+num_particles = 30
+dimensions = X_train.shape[1] * 3
+iterations = 100
+
+w = 0.7
+c1 = 1.5
+c2 = 1.5
+
+# Initialize particles
+particles = np.random.uniform(-1, 1, (num_particles, dimensions))
+velocities = np.zeros((num_particles, dimensions))
+
+pbest = particles.copy()
+pbest_scores = np.array([fitness(p) for p in particles])
+
+gbest = pbest[np.argmin(pbest_scores)]
+
+
+# PSO loop
+for _ in range(iterations):
+    for i in range(num_particles):
+
+        r1 = np.random.rand(dimensions)
+        r2 = np.random.rand(dimensions)
+
+        velocities[i] = (
+            w * velocities[i]
+            + c1 * r1 * (pbest[i] - particles[i])
+            + c2 * r2 * (gbest - particles[i])
+        )
+
+        particles[i] = particles[i] + velocities[i]
+
+        score = fitness(particles[i])
+
+        if score < pbest_scores[i]:
+            pbest[i] = particles[i]
+            pbest_scores[i] = score
+
+    gbest = pbest[np.argmin(pbest_scores)]
+
+# Best weights
+best_weights = gbest.reshape(X_train.shape[1], 3)
+
+# Test prediction
+scores = np.dot(X_test, best_weights)
+predictions = np.argmax(scores, axis=1)
+
+accuracy = accuracy_score(y_test, predictions)
+print("Accuracy:", accuracy)
+
