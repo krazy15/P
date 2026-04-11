@@ -1,0 +1,917 @@
+
+---
+
+1. HADOOP WORDCOUNT
+
+---
+
+Objective:
+To count frequency of words using Hadoop MapReduce.
+
+Explanation:
+MapReduce works in 3 phases:
+
+* Map → breaks data into key-value pairs (word,1)
+* Shuffle → groups same words
+* Reduce → sums counts
+
+Procedure:
+
+# Start Hadoop services
+
+start-dfs.sh
+start-yarn.sh
+
+# Create input file
+
+nano input.txt
+
+# Example text:
+
+# big data is big data
+
+# Create HDFS directory and upload file
+
+hdfs dfs -mkdir /input
+hdfs dfs -put input.txt /input
+
+# Run WordCount program
+
+hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar wordcount /input /output
+
+# View result
+
+hdfs dfs -cat /output/part-r-00000
+
+Expected Output:
+big 2
+data 2
+is 1
+
+---
+
+2. LOG ANALYSIS USING MAPREDUCE (SIMULATION)
+
+---
+
+Objective:
+Analyze logs to find frequent IP addresses and error types.
+
+Explanation:
+We simulate MapReduce:
+
+* Map → split logs
+* Reduce → count frequency
+
+Code:
+from collections import defaultdict
+
+logs = [
+"192.168.1.1 ERROR",
+"192.168.1.2 INFO",
+"192.168.1.1 ERROR"
+]
+
+ip_count = defaultdict(int)
+error_count = defaultdict(int)
+
+for log in logs:
+ip, status = log.split()
+ip_count[ip] += 1
+error_count[status] += 1
+
+print("IP Frequency:", dict(ip_count))
+print("Error Frequency:", dict(error_count))
+
+---
+
+3. MONGODB CRUD
+
+---
+
+Objective:
+Perform Create, Read, Update, Delete operations.
+
+Explanation:
+MongoDB is NoSQL → stores data as JSON documents.
+
+Commands:
+
+mongo
+
+use shopDB
+
+# Create
+
+db.products.insertOne({name:"Laptop", price:50000})
+
+# Read
+
+db.products.find()
+
+# Update
+
+db.products.updateOne({name:"Laptop"}, {$set:{price:55000}})
+
+# Delete
+
+db.products.deleteOne({name:"Laptop"})
+
+---
+
+4. STUDENT DATA STORAGE
+
+---
+
+Objective:
+Store and query student data efficiently.
+
+Explanation:
+Pandas DataFrame allows fast filtering and querying.
+
+Code:
+import pandas as pd
+
+df = pd.DataFrame({
+"Name":["A","B","C"],
+"Marks":[80,90,70]
+})
+
+# Filter students with marks > 75
+
+print(df[df["Marks"] > 75])
+
+---
+
+5. EDA (RETAIL ANALYSIS)
+
+---
+
+Objective:
+Explore dataset to identify patterns.
+
+Explanation:
+EDA includes:
+
+* summary statistics
+* visualization
+
+Code:
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = sns.load_dataset('tips')
+
+print(df.head())       # first rows
+print(df.describe())   # statistics
+
+# Visual trend
+
+sns.barplot(x='day', y='total_bill', data=df)
+plt.title("Sales Trend")
+plt.show()
+
+---
+
+6. COVID ANALYSIS
+
+---
+
+Objective:
+Analyze COVID trends.
+
+Explanation:
+We visualize cases and deaths.
+
+Code:
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({
+'Day':[1,2,3,4,5],
+'Cases':[100,200,400,800,1200],
+'Deaths':[5,10,20,40,80]
+})
+
+plt.plot(df['Day'], df['Cases'])
+plt.title("Cases Trend")
+plt.show()
+
+plt.plot(df['Day'], df['Deaths'])
+plt.title("Death Trend")
+plt.show()
+
+---
+
+7. SPAM CLASSIFICATION
+
+---
+
+Objective:
+Classify emails as spam or not.
+
+Explanation:
+
+* Convert text → numbers
+* Train classifier
+* Predict
+
+Code:
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score
+
+texts = ["free money now","hello friend","win prize","meeting tomorrow"]
+labels = [1,0,1,0]
+
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(texts)
+
+X_train,X_test,y_train,y_test = train_test_split(X,labels)
+
+model = MultinomialNB()
+model.fit(X_train,y_train)
+
+pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test,pred))
+
+---
+
+8. REGRESSION
+
+---
+
+Objective:
+Predict house price.
+
+Explanation:
+Linear regression finds relation between input and output.
+
+Code:
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+X = np.array([[1000],[1500],[2000]])
+y = [200000,300000,400000]
+
+model = LinearRegression()
+model.fit(X,y)
+
+print("Prediction:", model.predict([[1800]]))
+
+---
+
+9. SPARK DATAFRAME
+
+---
+
+Objective:
+Perform transformation and aggregation.
+
+Explanation:
+Spark handles big data using distributed processing.
+
+Code:
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("test").getOrCreate()
+
+data=[("A",10),("B",20),("A",30)]
+df=spark.createDataFrame(data,["Name","Value"])
+
+df.show()
+
+df_filtered = df.filter(df.Value > 10)
+df_group = df.groupBy("Name").sum()
+
+df_group.show()
+
+---
+
+10. COLLABORATIVE FILTERING
+
+---
+
+Objective:
+Recommend items using similarity.
+
+Explanation:
+Users with similar ratings → similar preferences.
+
+Code:
+import numpy as np
+
+ratings = np.array([
+[5,3,0],
+[4,0,0],
+[1,1,0]
+])
+
+similarity = ratings.dot(ratings.T)
+
+print(similarity)
+
+---
+
+11. DATA ANONYMIZATION
+
+---
+
+Objective:
+Protect sensitive data.
+
+Explanation:
+Masking hides real values.
+
+Code:
+import pandas as pd
+
+df = pd.DataFrame({
+"Name":["A","B"],
+"Phone":["9876543210","9123456780"]
+})
+
+df["Phone"] = df["Phone"].apply(lambda x:"XXXXXX"+x[-4:])
+print(df)
+
+---
+
+12. PRIVACY RISKS
+
+---
+
+Objective:
+Identify risks and mitigation.
+
+Explanation:
+Risks:
+
+* data leakage
+* identity exposure
+
+Solution:
+
+* masking
+* encryption
+
+Code:
+print("Risks: Data leakage, identity exposure")
+print("Solutions: Masking, encryption")
+
+---
+
+13. TRAFFIC ANALYSIS
+
+---
+
+Objective:
+Predict congestion.
+
+Explanation:
+High values indicate congestion.
+
+Code:
+import numpy as np
+
+traffic=[20,40,80,60]
+
+print("Average:",np.mean(traffic))
+
+for t in traffic:
+if t>60:
+print("High congestion")
+else:
+print("Normal")
+
+---
+
+14. HEALTHCARE ANALYSIS
+
+---
+
+Objective:
+Predict disease.
+
+Explanation:
+Decision tree classifies based on features.
+
+Code:
+from sklearn.tree import DecisionTreeClassifier
+import numpy as np
+
+X=np.array([[25],[40],[60]])
+y=[0,1,1]
+
+model=DecisionTreeClassifier()
+model.fit(X,y)
+
+print(model.predict([[50]]))
+
+---
+
+15. PERFORMANCE COMPARISON
+
+---
+
+Objective:
+Compare execution time.
+
+Explanation:
+Measures efficiency of computation.
+
+Code:
+import time
+
+start=time.time()
+sum(range(1000000))
+end=time.time()
+
+print("Execution Time:",end-start)
+
+---
+
+## END
+
+================ FOUNDATION OF BIG DATA LAB PRACTICALS =================
+
+PRACTICAL 1: MapReduce Word Count
+from collections import defaultdict
+import re
+
+def mapper(text):
+    words= re.findall(r'\w+',text.lower())
+    return[(word,1)for word in words]
+
+
+def shuffle(mapped_data):
+    grouped = defaultdict(list)
+    for word,count in mapped_data:
+        grouped[word].append(count)
+    return grouped
+
+def reducer(grouped_data):
+    reduced={}
+    for word,counts in grouped_data.items():
+        reduced[word]= sum(counts)
+    return reduced
+
+text = "Big data is big and big data is powerful"
+
+mapped=mapper(text)
+grouped = shuffle(mapped)
+result= reducer(grouped)
+
+print(result)
+======================================================
+PRACTICAL 2: Log Analysis
+from collections import defaultdict
+import re
+
+# -------- SAMPLE LOG DATA --------
+logs = [
+    '192.168.1.1 - - [10/Oct/2025] "GET /index.html HTTP/1.1" 404 2326',
+    '192.168.1.2 - - [10/Oct/2025] "POST /login HTTP/1.1" 200 1234',
+    '192.168.1.1 - - [10/Oct/2025] "GET /home HTTP/1.1" 500 532',
+    '192.168.1.3 - - [10/Oct/2025] "GET /about HTTP/1.1" 404 111',
+    '192.168.1.1 - - [10/Oct/2025] "GET /contact HTTP/1.1" 200 222'
+]
+
+# -------- MAP FUNCTION --------
+def mapper(logs):
+    mapped = []
+    for line in logs:
+        parts = line.split()
+        
+        ip = parts[0]
+        status = parts[-2]
+        
+        mapped.append((ip, 1))
+        mapped.append((f"STATUS_{status}", 1))
+    
+    return mapped
+
+# -------- SHUFFLE --------
+def shuffle(mapped):
+    grouped = defaultdict(list)
+    for key, value in mapped:
+        grouped[key].append(value)
+    return grouped
+
+# -------- REDUCE --------
+def reducer(grouped):
+    reduced = {}
+    for key, values in grouped.items():
+        reduced[key] = sum(values)
+    return reduced
+
+# -------- DRIVER --------
+mapped = mapper(logs)
+grouped = shuffle(mapped)
+result = reducer(grouped)
+
+# Separate outputs
+ip_counts = {k: v for k, v in result.items() if not k.startswith("STATUS")}
+status_counts = {k: v for k, v in result.items() if k.startswith("STATUS")}
+
+print("IP Counts:", ip_counts)
+print("Status Counts:", status_counts)
+
+=============================================================
+PRACTICAL 3: MongoDB CRUD
+!pip install pymongo
+
+import sys
+!"{sys.executable}" -m pip install pymongo
+
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017/")
+db = client['store_db']
+products = db["products"]
+
+product = {
+    "name": "Laptop",
+    "price": 60000,
+    "brand": "HP"
+}
+
+products.insert_one(product)
+
+for p in products.find():
+    print(p)
+
+for p in products.find({"name":"Laptop"}):
+    print(p)
+
+products.delete_one({"name":"Laptop"})
+
+def update_product(name, new_data):
+    products.update_one(
+        {"name": name},
+        {"$set": new_data}
+    )
+    print("Product updated")
+
+# Example
+update_product("iPhone 14", {"price": 75000, "stock": 8})
+
+===============================================================================
+PRACTICAL 4: Student Data
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017")
+db=client["college"]
+students=db['students']
+
+students.insert_one({
+    "id":"A66",
+    'name':'Vikram',
+    'age':21,
+    "course":"AIML"
+})
+
+for s in students.find():
+    print(s)
+
+students.find({"course": "AIML"})
+
+students.update_one(
+    {"id":"S101"},
+    {"$set":}
+)
+
+====================================================================
+PRACTICAL 5: EDA
+import pandas as pd
+import numpy as np
+
+retail_sales_dataset.csv")
+df.info()
+df.isnull().sum()
+df['Date']= pd.to_datetime(df['Date'])
+df.head()
+
+top_categories = df.groupby('Product Category')['Quantity'].sum()
+top_categories
+
+import matplotlib.pyplot as plt
+
+top_categories.plot(kind='bar')
+plt.title("Top Product Categories by Quantity")
+plt.xlabel("Category")
+plt.ylabel("Quantity Sold")
+plt.show()
+
+top_revenue = df.groupby('Product Category')['Total Amount'].sum()
+top_revenue
+
+top_revenue.plot(kind="bar")
+plt.title("Revenue by Category")
+plt.ylabel("Total Revenue")
+plt.show()
+
+import seaborn as sns
+
+sns.barplot(x="Month_name", y="Total Amount", data=df, estimator=sum)
+plt.title("Sales by Month")
+plt.show()
+
+pivot = df.pivot_table(values='Total Amount', index='Month', columns='Year',aggfunc='sum')
+sns.heatmap(pivot, annot=True,fmt=".0f")
+plt.show()
+
+=========================================================================
+PRACTICAL 6: COVID Analysis
+import pandas as pd
+import matplotlib.pyplot as plt
+country_wise_latest.csv")
+
+top_cases = df.sort_values(by='Confirmed', ascending=False).head(10)
+top_cases.head()
+
+plt.figure(figsize=(18,8))
+plt.bar(top_cases['Country/Region'], top_cases['Confirmed'])
+plt.xticks(rotation=45)
+plt.title("Top 10 Countries by Confirmed Cases")
+plt.xlabel("Country")
+plt.ylabel("Confirmed Cases")
+plt.show()
+
+top_deaths= df.sort_values(by='Deaths / 100 Cases', ascending=False).head(10)
+top_deaths
+
+plt.figure(figsize=(10,5))
+plt.bar(top_deaths['Country/Region'], top_deaths['Deaths / 100 Cases'])
+plt.xticks(rotation=45)
+plt.title("Highest Death Rate by Country")
+plt.ylabel("Deaths per 100 Cases")
+plt.show()
+
+===============================================================================
+PRACTICAL 7: Spam Detection
+import pandas as pd
+import numpy as np
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+emails.csv")
+df
+
+X = df['text']
+y=df['spam']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+vectorizer= CountVectorizer(stop_words='english')
+X_train = vectorizer.fit_transform(X_train)
+X_test = vectorizer.transform(X_test)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+
+=============================================================================
+PRACTICAL 8: Housing Prediction
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+Housing.csv")
+
+df.isnull().sum()
+df= pd.get_dummies(df, drop_first=True)
+X= df.drop("price", axis=1)
+y= df["price"]
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+from sklearn.linear_model import LinearRegression
+
+lr= LinearRegression()
+lr.fit(X_train, y_train)
+
+y_pred = lr.predict(X_test)
+
+from sklearn.tree import DecisionTreeRegressor
+
+dt = DecisionTreeRegressor()
+dt.fit(X_train, y_train)
+
+y_pred_dt = dt.predict(X_test)
+
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score
+print("MAE:", mean_absolute_error(y_test, y_pred))
+
+plt.scatter(y_test,y_pred)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.title("Actual vs Predicted (Linear Regression)")
+plt.show()
+
+plt.scatter(y_test, y_pred_dt)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.title("Decision Tree: Actual vs Predicted")
+plt.show()
+
+=======================================================================
+PRACTICAL 9: Spark Cleaning
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("clean").getOrCreate()
+df = spark.read.csv("data.csv", header=True)
+df = df.dropna()
+df.show()
+
+
+PRACTICAL 10: Collaborative Filtering
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("CollaborativeFiltering").getOrCreate()
+
+df= spark.read.csv("ratings.csv", header=True, inferSchema=True)
+df.show(5)
+
+data = df.select("userId", "itemId", "rating")
+data.printSchema()
+
+train, test = data.randomSplit([0.8, 0.2])
+
+from pyspark.ml.recommendation import ALS
+
+als = ALS(
+     userCol="userId",
+    itemCol="itemId",
+    ratingCol="rating",
+    nonnegative=True,
+    implicitPrefs=False,
+    coldStartStrategy="drop"
+)
+
+model = als.fit(train)
+
+prediction = model.transform(test)
+prediction.show(5)
+
+========================================================================
+PRACTICAL 11: Anonymization
+data = [
+    {"name": "Vikram Rawat", "email": "vikramr@gmail.com", "phone": "9876543210", "age": 21},
+    {"name": "Rahul Sharma", "email": "rahul123@yahoo.com", "phone": "9123456780", "age": 35}
+]
+
+def mask_email(email):
+    name,domain = email.split("@")
+    return name[0]+ "****@"+ domain
+    
+def mask_phone(phone):
+    return "******"+ phone[-4:]
+
+def generalize_age(age):
+    if age<18:
+        return "Under 18"
+    elif age< 30:
+        return "18-29"
+    elif age< 50:
+        return "30-49"
+    else:
+        return "50+"
+
+def anonymize_data(data):
+    anonymize=[]
+
+    for user in data:
+        new_user = {
+            "name":user["name"][0]+ "***",
+            "email": mask_email(user["email"]),
+            "phone": mask_phone(user["phone"]),
+            "age": generalize_age(user["age"])
+        }
+        anonymize.append(new_user)
+
+    return anonymize
+
+result = anonymize_data(data)
+
+for r in result:
+    print(r)
+
+=========================================================================
+PRACTICAL 12: same as 11 
+
+=========================================================================
+PRACTICAL 13: Traffic Prediction
+import pandas as pd
+traffic.csv")
+
+df['DateTime']= pd.to_datetime(df['DateTime'])
+
+df['hour']= df['DateTime'].dt.hour
+df['day']= df['DateTime'].dt.dayofweek
+
+df= df.drop("ID",axis=1)
+df.head()
+
+def class_congestion(x):
+    if x<10:
+        return "Low"
+    elif x <20:
+        return "Medium"
+    else:
+        return "High"
+
+df['congestion']= df['Vehicles'].apply(class_congestion)
+
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+df['congestion']= le.fit_transform(df['congestion'])
+
+X = df[['hour', 'day','Junction', 'Vehicles']]
+y = df['congestion']
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+model = RandomForestClassifier()
+model.fit(X_train,y_train)
+
+from sklearn.metrics import accuracy_score
+
+y_pred = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+!pip install network
+import networkx as nx
+
+G = nx.Graph()
+
+G.add_edge(1,2,weight=5)
+G.add_edge(2,3,weight=7)
+G.add_edge(1,3,weight=15)
+
+print(nx.dijkstra_path(G,1,3))
+
+import matplotlib.pyplot as plt
+
+df.groupby('hour')['Vehicles'].mean().plot()
+plt.title("Traffic vs Hour")
+plt.xlabel("Hour")
+plt.ylabel("Avg Vehicles")
+plt.show()
+
+===========================================================================
+PRACTICAL 14: Healthcare Model
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+diabetes.csv")
+df.head()
+df.isnull().sum()
+df.fillna(df.mean(), inplace=True)
+
+X = df.drop("Outcome",axis=1)
+y = df["Outcome"]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = LogisticRegression()
+model.fit(X_train,y_train)
+
+y_pred = model.predict(X_test)
+
+from sklearn.metrics import accuracy_score
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+===================================================================================
+PRACTICAL 15: Performance
+import time
+start=time.time()
+sum(range(1000000))
+print("Execution Time:",time.time()-start)
+
