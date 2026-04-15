@@ -1,0 +1,2275 @@
+====================================================================
+PRACTICAL 1: Student Ranking using Bubble Sort
+
+Aim:
+To rank students based on their scores using Bubble Sort and display the top 10 candidates.
+
+Theory:
+Sorting is the process of arranging data in a particular order (ascending or descending).
+Bubble Sort is a simple comparison-based sorting algorithm where adjacent elements are repeatedly compared and swapped if they are in the wrong order.
+
+In this problem:
+- Students are ranked based on marks
+- Sorting is done in descending order (highest marks first)
+- Top 10 students are displayed after sorting
+
+Key Points:
+- Time Complexity: O(n^2)
+- Space Complexity: O(1)
+- Simple but inefficient for large datasets
+
+Algorithm:
+1. Start
+2. Input number of students (n)
+3. Input student names and scores
+4. Apply Bubble Sort:
+   - Compare adjacent scores
+   - Swap if current score < next score
+   - Repeat for all elements
+5. After sorting, highest scores will be at the top
+6. Display top 10 students (or all if n < 10)
+7. Stop
+
+Java Code:
+import java.util.*;
+
+class Student {
+    String name;
+    int marks;
+
+    Student(String name, int marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+}
+
+public class StudentRanking {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of students: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        Student[] students = new Student[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter name of student " + (i + 1) + ": ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter marks of student " + (i + 1) + ": ");
+            int marks = sc.nextInt();
+            sc.nextLine();
+
+            students[i] = new Student(name, marks);
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (students[j].marks < students[j + 1].marks) {
+                    Student temp = students[j];
+                    students[j] = students[j + 1];
+                    students[j + 1] = temp;
+                }
+            }
+        }
+
+        System.out.println("\nTop Students:");
+        int limit = Math.min(10, n);
+
+        for (int i = 0; i < limit; i++) {
+            System.out.println((i + 1) + ". " + students[i].name + " - " + students[i].marks);
+        }
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Vikram 85
+
+Conclusion:
+Bubble Sort is used to rank students in descending order. It is easy to implement but inefficient for large datasets.
+
+=======================================================================
+PRACTICAL 2: Shortlisting Internship Candidates using Selection Sort
+
+Aim:
+To shortlist internship candidates based on test scores using Selection Sort and display the top 10 students.
+
+Theory:
+Sorting is used to arrange data in a specific order. Selection Sort is a simple comparison-based sorting algorithm that repeatedly selects the maximum (or minimum) element from the unsorted portion and places it in the correct position.
+
+In this problem:
+- Candidates are ranked based on test scores
+- Sorting is done in descending order (highest score first)
+- Top 10 candidates are displayed
+
+Key Points:
+- Time Complexity: O(n^2)
+- Space Complexity: O(1)
+- Performs fewer swaps compared to Bubble Sort
+- Not stable by default
+
+Algorithm:
+1. Start
+2. Input number of candidates (n)
+3. Input candidate names and scores
+4. Apply Selection Sort:
+   - For each position i:
+       - Find index of maximum score in remaining array
+       - Swap it with element at position i
+5. After sorting, highest scores will be at the top
+6. Display top 10 candidates (or all if n < 10)
+7. Stop
+
+Java Code:
+import java.util.*;
+
+class Candidate {
+    String name;
+    int score;
+
+    Candidate(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+}
+
+public class InternshipSelection {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of candidates: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        Candidate[] candidates = new Candidate[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter name of candidate " + (i + 1) + ": ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter score of candidate " + (i + 1) + ": ");
+            int score = sc.nextInt();
+            sc.nextLine();
+
+            candidates[i] = new Candidate(name, score);
+        }
+
+        // Selection Sort (Descending Order)
+        for (int i = 0; i < n - 1; i++) {
+            int maxIndex = i;
+
+            for (int j = i + 1; j < n; j++) {
+                if (candidates[j].score > candidates[maxIndex].score) {
+                    maxIndex = j;
+                }
+            }
+
+            // Swap
+            Candidate temp = candidates[i];
+            candidates[i] = candidates[maxIndex];
+            candidates[maxIndex] = temp;
+        }
+
+        System.out.println("\nTop Candidates:");
+        int limit = Math.min(10, n);
+
+        for (int i = 0; i < limit; i++) {
+            System.out.println((i + 1) + ". " + candidates[i].name + " - " + candidates[i].score);
+        }
+
+        sc.close();
+    }
+}
+
+Conclusion:
+Selection Sort successfully ranks candidates based on scores. It performs fewer swaps than Bubble Sort but still has O(n^2) time complexity, making it inefficient for large datasets.
+
+=================================================================
+PRACTICAL 3: Competitive Exam Leaderboard using Insertion Sort
+
+Aim:
+To generate a competitive exam leaderboard by sorting scores using Insertion Sort and display the top 10 rank holders.
+
+Theory:
+Sorting arranges data in a specific order. Insertion Sort is a simple sorting algorithm that builds the final sorted array one element at a time by inserting each element into its correct position.
+
+In this problem:
+- Students are ranked based on exam scores
+- Sorting is done in descending order (highest score first)
+- Top 10 rank holders are displayed
+
+Key Points:
+- Time Complexity: O(n^2) (worst case), O(n) (best case when already sorted)
+- Space Complexity: O(1)
+- Stable sorting algorithm
+- Efficient for small or nearly sorted datasets
+
+Algorithm:
+1. Start
+2. Input number of students (n)
+3. Input student names and scores
+4. Apply Insertion Sort:
+   - Start from second element
+   - Compare with previous elements
+   - Shift elements smaller than key
+   - Insert element at correct position
+5. After sorting, highest scores will be at the top
+6. Display top 10 students (or all if n < 10)
+7. Stop
+
+Java Code:
+import java.util.*;
+
+class Student {
+    String name;
+    int score;
+
+    Student(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+}
+
+public class LeaderboardInsertion {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of students: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        Student[] students = new Student[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter name of student " + (i + 1) + ": ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter score of student " + (i + 1) + ": ");
+            int score = sc.nextInt();
+            sc.nextLine();
+
+            students[i] = new Student(name, score);
+        }
+
+        // Insertion Sort (Descending Order)
+        for (int i = 1; i < n; i++) {
+            Student key = students[i];
+            int j = i - 1;
+
+            while (j >= 0 && students[j].score < key.score) {
+                students[j + 1] = students[j];
+                j--;
+            }
+
+            students[j + 1] = key;
+        }
+
+        System.out.println("\nLeaderboard (Top Students):");
+        int limit = Math.min(10, n);
+
+        for (int i = 0; i < limit; i++) {
+            System.out.println((i + 1) + ". " + students[i].name + " - " + students[i].score);
+        }
+
+        sc.close();
+    }
+}
+
+Conclusion:
+Insertion Sort effectively ranks students by scores and is efficient for small or nearly sorted datasets, though inefficient for large datasets due to O(n^2) complexity.
+
+==================================================================
+PRACTICAL 4: Placement Eligibility using Bubble Sort
+
+Aim:
+To identify placement-eligible students by sorting aptitude scores using Bubble Sort and display top performers.
+
+Theory:
+Sorting arranges data in a specific order. Bubble Sort is a simple comparison-based sorting algorithm where adjacent elements are repeatedly compared and swapped if they are in the wrong order.
+
+In this problem:
+- Students are ranked based on aptitude scores
+- Sorting is done in descending order (highest score first)
+- Top performers are considered placement-eligible
+
+Key Points:
+- Time Complexity: O(n^2)
+- Space Complexity: O(1)
+- Stable sorting algorithm
+- Simple but inefficient for large datasets
+
+Algorithm:
+1. Start
+2. Input number of students (n)
+3. Input student names and aptitude scores
+4. Apply Bubble Sort:
+   - Compare adjacent scores
+   - Swap if current score < next score
+   - Repeat for all elements
+5. After sorting, highest scores will be at the top
+6. Display top performers (top 10 or all if n < 10)
+7. Stop
+
+Java Code:
+import java.util.*;
+
+class Student {
+    String name;
+    int score;
+
+    Student(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+}
+
+public class PlacementEligibility {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of students: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        Student[] students = new Student[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter name of student " + (i + 1) + ": ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter aptitude score of student " + (i + 1) + ": ");
+            int score = sc.nextInt();
+            sc.nextLine();
+
+            students[i] = new Student(name, score);
+        }
+
+        // Bubble Sort (Descending Order)
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (students[j].score < students[j + 1].score) {
+                    Student temp = students[j];
+                    students[j] = students[j + 1];
+                    students[j + 1] = temp;
+                }
+            }
+        }
+
+        System.out.println("\nPlacement Eligible Students (Top Performers):");
+        int limit = Math.min(10, n);
+
+        for (int i = 0; i < limit; i++) {
+            System.out.println((i + 1) + ". " + students[i].name + " - " + students[i].score);
+        }
+
+        sc.close();
+    }
+}
+
+Conclusion:
+Bubble Sort is used to rank students based on aptitude scores. It is simple to implement but inefficient for large datasets due to O(n^2) complexity.
+
+================================================================
+PRACTICAL 5: Ranking Learners using Selection Sort
+
+Aim:
+To rank learners on an online platform by sorting quiz scores using Selection Sort and display the top 10 learners.
+
+Theory:
+Sorting arranges data in a specific order. Selection Sort is a comparison-based sorting algorithm that repeatedly selects the maximum element from the unsorted portion and places it at the correct position.
+
+In this problem:
+- Learners are ranked based on quiz scores
+- Sorting is done in descending order (highest score first)
+- Top 10 learners are displayed
+
+Key Points:
+- Time Complexity: O(n^2)
+- Space Complexity: O(1)
+- Performs fewer swaps compared to Bubble Sort
+- Not stable by default
+
+Algorithm:
+1. Start
+2. Input number of learners (n)
+3. Input learner names and quiz scores
+4. Apply Selection Sort:
+   - For each position i:
+       - Find index of maximum score in remaining array
+       - Swap it with element at position i
+5. After sorting, highest scores will be at the top
+6. Display top 10 learners (or all if n < 10)
+7. Stop
+
+Java Code:
+import java.util.*;
+
+class Learner {
+    String name;
+    int score;
+
+    Learner(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+}
+
+public class OnlineRanking {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of learners: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        Learner[] learners = new Learner[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter name of learner " + (i + 1) + ": ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter quiz score of learner " + (i + 1) + ": ");
+            int score = sc.nextInt();
+            sc.nextLine();
+
+            learners[i] = new Learner(name, score);
+        }
+
+        // Selection Sort (Descending Order)
+        for (int i = 0; i < n - 1; i++) {
+            int maxIndex = i;
+
+            for (int j = i + 1; j < n; j++) {
+                if (learners[j].score > learners[maxIndex].score) {
+                    maxIndex = j;
+                }
+            }
+
+            // Swap
+            Learner temp = learners[i];
+            learners[i] = learners[maxIndex];
+            learners[maxIndex] = temp;
+        }
+
+        System.out.println("\nTop Learners:");
+        int limit = Math.min(10, n);
+
+        for (int i = 0; i < limit; i++) {
+            System.out.println((i + 1) + ". " + learners[i].name + " - " + learners[i].score);
+        }
+
+        sc.close();
+    }
+}
+
+Conclusion:
+Selection Sort ranks learners based on quiz scores. It reduces the number of swaps compared to Bubble Sort but still has O(n^2) time complexity.
+
+===============================================================
+PRACTICAL 6: Selecting Top Athletes using Insertion Sort
+
+Aim:
+To select top athletes by sorting performance scores using Insertion Sort and display the top 10 players.
+
+Theory:
+Sorting arranges data in a specific order. Insertion Sort is a simple algorithm that builds the sorted list one element at a time by inserting each element into its correct position.
+
+In this problem:
+- Athletes are ranked based on performance scores
+- Sorting is done in descending order (highest score first)
+- Top 10 athletes are displayed
+
+Key Points:
+- Time Complexity: O(n^2) (worst case), O(n) (best case)
+- Space Complexity: O(1)
+- Stable sorting algorithm
+- Efficient for small or nearly sorted datasets
+
+Algorithm:
+1. Start
+2. Input number of athletes (n)
+3. Input athlete names and performance scores
+4. Apply Insertion Sort:
+   - Start from second element
+   - Compare with previous elements
+   - Shift elements smaller than key
+   - Insert element at correct position
+5. After sorting, highest scores will be at the top
+6. Display top 10 athletes (or all if n < 10)
+7. Stop
+
+Java Code:
+import java.util.*;
+
+class Athlete {
+    String name;
+    int score;
+
+    Athlete(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+}
+
+public class AthleteSelection {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of athletes: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        Athlete[] athletes = new Athlete[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter name of athlete " + (i + 1) + ": ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter performance score of athlete " + (i + 1) + ": ");
+            int score = sc.nextInt();
+            sc.nextLine();
+
+            athletes[i] = new Athlete(name, score);
+        }
+
+        // Insertion Sort (Descending Order)
+        for (int i = 1; i < n; i++) {
+            Athlete key = athletes[i];
+            int j = i - 1;
+
+            while (j >= 0 && athletes[j].score < key.score) {
+                athletes[j + 1] = athletes[j];
+                j--;
+            }
+
+            athletes[j + 1] = key;
+        }
+
+        System.out.println("\nTop Athletes:");
+        int limit = Math.min(10, n);
+
+        for (int i = 0; i < limit; i++) {
+            System.out.println((i + 1) + ". " + athletes[i].name + " - " + athletes[i].score);
+        }
+
+        sc.close();
+    }
+}
+
+Conclusion:
+Insertion Sort effectively ranks athletes based on performance scores. It is suitable for small or nearly sorted datasets but inefficient for large datasets.
+
+=================================================================
+PRACTICAL 7: Arrange Library Books using Insertion Sort
+
+Aim:
+To arrange library books by sorting accession numbers using Insertion Sort and display the ordered list.
+
+Theory:
+Sorting arranges data in a specific order. Insertion Sort is a simple algorithm that builds a sorted list by inserting each element into its correct position.
+
+In this problem:
+- Books are arranged based on accession numbers
+- Sorting is done in ascending order (smallest number first)
+- Final ordered list is displayed
+
+Key Points:
+- Time Complexity: O(n^2) (worst case), O(n) (best case)
+- Space Complexity: O(1)
+- Stable sorting algorithm
+- Efficient for small or nearly sorted datasets
+
+Algorithm:
+1. Start
+2. Input number of books (n)
+3. Input book names and accession numbers
+4. Apply Insertion Sort:
+   - Start from second element
+   - Compare with previous elements
+   - Shift elements greater than key
+   - Insert element at correct position
+5. After sorting, smallest accession numbers will come first
+6. Display ordered list of books
+7. Stop
+
+Java Code:
+import java.util.*;
+
+class Book {
+    String title;
+    int accessionNo;
+
+    Book(String title, int accessionNo) {
+        this.title = title;
+        this.accessionNo = accessionNo;
+    }
+}
+
+public class LibrarySorting {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of books: ");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        Book[] books = new Book[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter title of book " + (i + 1) + ": ");
+            String title = sc.nextLine();
+
+            System.out.print("Enter accession number of book " + (i + 1) + ": ");
+            int acc = sc.nextInt();
+            sc.nextLine();
+
+            books[i] = new Book(title, acc);
+        }
+
+        // Insertion Sort (Ascending Order)
+        for (int i = 1; i < n; i++) {
+            Book key = books[i];
+            int j = i - 1;
+
+            while (j >= 0 && books[j].accessionNo > key.accessionNo) {
+                books[j + 1] = books[j];
+                j--;
+            }
+
+            books[j + 1] = key;
+        }
+
+        System.out.println("\nOrdered List of Books:");
+        for (int i = 0; i < n; i++) {
+            System.out.println(books[i].accessionNo + " - " + books[i].title);
+        }
+
+        sc.close();
+    }
+}
+
+Sample Input:
+BookA 105
+BookB 101
+
+Conclusion:
+Insertion Sort successfully arranges books based on accession numbers in ascending order. It is efficient for small datasets but not suitable for large datasets.
+
+============================================================
+PRACTICAL 8: Finding GCD to Simplify Ratios
+
+Aim:
+To find the Greatest Common Divisor (GCD) of two numbers to simplify ratios.
+
+Theory:
+The Greatest Common Divisor (GCD) of two numbers is the largest number that divides both numbers without leaving a remainder.
+
+The most efficient method to find GCD is the Euclidean Algorithm, which is based on the principle:
+GCD(a, b) = GCD(b, a % b)
+
+This process continues until the remainder becomes zero.
+
+Key Points:
+- Time Complexity: O(log min(a, b))
+- Efficient for large numbers
+- Widely used in simplifying fractions and ratios
+
+Algorithm (Euclidean Algorithm):
+1. Start
+2. Input two numbers a and b
+3. While b ≠ 0:
+   a. Compute remainder r = a % b
+   b. Set a = b
+   c. Set b = r
+4. When b = 0, GCD = a
+5. Stop
+
+Java Code:
+import java.util.*;
+
+public class GCDExample {
+    public static int findGCD(int a, int b) {
+        while (b != 0) {
+            int r = a % b;
+            a = b;
+            b = r;
+        }
+        return a;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter first number: ");
+        int a = sc.nextInt();
+
+        System.out.print("Enter second number: ");
+        int b = sc.nextInt();
+
+        int gcd = findGCD(a, b);
+
+        System.out.println("GCD of " + a + " and " + b + " is: " + gcd);
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter first number: 48
+Enter second number: 18
+
+Conclusion:
+The Euclidean Algorithm efficiently computes the GCD of two numbers and is useful in simplifying ratios and fractions.
+
+===================================================================
+PRACTICAL 9: Generate Fibonacci Sequence
+
+Aim:
+To generate the Fibonacci sequence to model progressive growth patterns.
+
+Theory:
+The Fibonacci sequence is a series of numbers where each number is the sum of the two preceding ones.
+
+Sequence:
+0, 1, 1, 2, 3, 5, 8, 13, ...
+
+Mathematically:
+F(n) = F(n-1) + F(n-2)
+
+This sequence is widely used in computer science, mathematics, and modeling growth patterns such as population growth.
+
+Key Points:
+- Time Complexity: O(n)
+- Space Complexity: O(1) (iterative approach)
+- Can also be implemented using recursion (less efficient)
+
+Algorithm:
+1. Start
+2. Input number of terms (n)
+3. Initialize:
+   a = 0, b = 1
+4. Print a and b
+5. For i from 2 to n-1:
+   a. c = a + b
+   b. Print c
+   c. a = b
+   d. b = c
+6. Stop
+
+Java Code:
+import java.util.*;
+
+public class FibonacciSeries {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of terms: ");
+        int n = sc.nextInt();
+
+        int a = 0, b = 1;
+
+        System.out.println("Fibonacci Sequence:");
+
+        if (n >= 1)
+            System.out.print(a + " ");
+        if (n >= 2)
+            System.out.print(b + " ");
+
+        for (int i = 2; i < n; i++) {
+            int c = a + b;
+            System.out.print(c + " ");
+            a = b;
+            b = c;
+        }
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of terms: 7
+
+Conclusion:
+The Fibonacci sequence models progressive growth where each term depends on previous values. It is efficiently generated using an iterative approach.
+
+==================================================================
+PRACTICAL 10: Sequential Search (Linear Search)
+
+Aim:
+To search for a specific element in an unsorted list using sequential search.
+
+Theory:
+Sequential Search, also known as Linear Search, is a simple searching technique where each element in the list is checked one by one until the desired element is found or the list ends.
+
+It is suitable for unsorted data where more efficient algorithms like binary search cannot be applied.
+
+Key Points:
+- Time Complexity: O(n)
+- Space Complexity: O(1)
+- Works on unsorted data
+- Simple but inefficient for large datasets
+
+Algorithm:
+1. Start
+2. Input number of elements (n)
+3. Input list elements
+4. Input element to search (key)
+5. For each element in the list:
+   a. Compare element with key
+   b. If match found:
+       - Display position
+       - Stop
+6. If no match found, display "Element not found"
+7. Stop
+
+Java Code:
+import java.util.*;
+
+public class SequentialSearch {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+
+        int[] arr = new int[n];
+
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        System.out.print("Enter element to search: ");
+        int key = sc.nextInt();
+
+        boolean found = false;
+
+        for (int i = 0; i < n; i++) {
+            if (arr[i] == key) {
+                System.out.println("Element found at position: " + (i + 1));
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Element not found");
+        }
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of elements: 5
+10 25 30 45 50
+Enter element to search: 30
+
+Conclusion:
+Sequential Search is a simple method to find elements in an unsorted list, but it is inefficient for large datasets due to its O(n) time complexity.
+
+========================================================================
+PRACTICAL 11: Binary Search on Sorted Array
+
+Aim:
+To locate a target element in a sorted array using binary search.
+
+Theory:
+Binary Search is an efficient searching algorithm that works on sorted data. It repeatedly divides the search interval into two halves.
+
+Steps:
+- Compare the target with the middle element
+- If equal → found
+- If smaller → search left half
+- If larger → search right half
+
+Key Points:
+- Time Complexity: O(log n)
+- Space Complexity: O(1) (iterative)
+- Requires sorted array
+- Much faster than linear search for large datasets
+
+Algorithm:
+1. Start
+2. Input number of elements (n)
+3. Input sorted array elements
+4. Input element to search (key)
+5. Initialize:
+   low = 0, high = n - 1
+6. While low ≤ high:
+   a. mid = (low + high) / 2
+   b. If arr[mid] == key → element found
+   c. If key < arr[mid] → high = mid - 1
+   d. Else → low = mid + 1
+7. If not found, display "Element not found"
+8. Stop
+
+Java Code:
+import java.util.*;
+
+public class BinarySearchExample {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+
+        int[] arr = new int[n];
+
+        System.out.println("Enter sorted elements:");
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        System.out.print("Enter element to search: ");
+        int key = sc.nextInt();
+
+        int low = 0, high = n - 1;
+        boolean found = false;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            if (arr[mid] == key) {
+                System.out.println("Element found at position: " + (mid + 1));
+                found = true;
+                break;
+            } else if (key < arr[mid]) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Element not found");
+        }
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of elements: 5
+10 20 30 40 50
+Enter element to search: 30
+
+Conclusion:
+Binary Search efficiently locates elements in a sorted array using divide and conquer approach, making it much faster than linear search for large datasets.
+
+=============================================================
+PRACTICAL 12: Sorting using Merge Sort
+
+Aim:
+To sort a list of elements efficiently using Merge Sort.
+
+Theory:
+Merge Sort is a divide-and-conquer algorithm that divides the list into smaller sublists, sorts them, and then merges them back together in sorted order.
+
+Steps involved:
+1. Divide the array into two halves
+2. Recursively sort each half
+3. Merge the sorted halves
+
+Key Points:
+- Time Complexity: O(n log n)
+- Space Complexity: O(n)
+- Stable sorting algorithm
+- Efficient for large datasets
+
+Algorithm:
+1. Start
+2. Input number of elements (n)
+3. Input array elements
+4. Apply Merge Sort:
+   a. Divide array into two halves
+   b. Recursively sort left half
+   c. Recursively sort right half
+   d. Merge the two sorted halves
+5. Display sorted array
+6. Stop
+
+Java Code:
+import java.util.*;
+
+public class MergeSortExample {
+
+    public static void merge(int arr[], int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        int L[] = new int[n1];
+        int R[] = new int[n2];
+
+        for (int i = 0; i < n1; i++)
+            L[i] = arr[left + i];
+        for (int j = 0; j < n2; j++)
+            R[j] = arr[mid + 1 + j];
+
+        int i = 0, j = 0, k = left;
+
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                i++;
+            } else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+
+    public static void mergeSort(int arr[], int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+
+            merge(arr, left, mid, right);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+
+        int[] arr = new int[n];
+
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        mergeSort(arr, 0, n - 1);
+
+        System.out.println("Sorted Array:");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of elements: 5
+38 27 43 3 9
+
+Conclusion:
+Merge Sort efficiently sorts elements using divide-and-conquer strategy with O(n log n) time complexity, making it suitable for large datasets.
+
+=====================================================================
+PRACTICAL 13: Sorting using Heap Sort
+
+Aim:
+To arrange elements based on priority using Heap Sort.
+
+Theory:
+Heap Sort is a comparison-based sorting algorithm that uses a Binary Heap data structure.
+
+A Binary Heap is a complete binary tree that satisfies the heap property:
+- Max Heap: Parent node is greater than its children
+- Min Heap: Parent node is smaller than its children
+
+In Heap Sort:
+- A Max Heap is used to sort elements in ascending order
+- The largest element is placed at the root and then swapped with the last element
+- The heap size is reduced and heap property is restored
+
+Key Points:
+- Time Complexity: O(n log n)
+- Space Complexity: O(1)
+- Not stable
+- Efficient for large datasets
+
+Algorithm:
+1. Start
+2. Input number of elements (n)
+3. Input array elements
+4. Build Max Heap from array
+5. For i from n-1 to 1:
+   a. Swap root (largest) with last element
+   b. Reduce heap size
+   c. Heapify root to maintain heap property
+6. Display sorted array
+7. Stop
+
+Java Code:
+import java.util.*;
+
+public class HeapSortExample {
+
+    public static void heapify(int arr[], int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest != i) {
+            int temp = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = temp;
+
+            heapify(arr, n, largest);
+        }
+    }
+
+    public static void heapSort(int arr[], int n) {
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify(arr, n, i);
+
+        for (int i = n - 1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+
+            heapify(arr, i, 0);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+
+        int[] arr = new int[n];
+
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        heapSort(arr, n);
+
+        System.out.println("Sorted Array:");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of elements: 5
+12 11 13 5 6
+
+Conclusion:
+Heap Sort efficiently sorts elements using a heap data structure with O(n log n) time complexity and constant space, making it suitable for large datasets.
+
+=========================================================================
+PRACTICAL 14: Sorting using Quick Sort
+
+Aim:
+To sort a dataset quickly using Quick Sort algorithm.
+
+Theory:
+Quick Sort is a divide-and-conquer sorting algorithm that selects a pivot element and partitions the array into two parts:
+- Elements smaller than pivot
+- Elements greater than pivot
+
+The process is recursively applied to subarrays.
+
+Key Points:
+- Time Complexity:
+  - Best/Average: O(n log n)
+  - Worst: O(n^2)
+- Space Complexity: O(log n) (recursive stack)
+- Not stable
+- Very fast in practice
+
+Algorithm:
+1. Start
+2. Input number of elements (n)
+3. Input array elements
+4. Apply Quick Sort:
+   a. Select a pivot element
+   b. Partition array around pivot
+   c. Recursively sort left and right subarrays
+5. Display sorted array
+6. Stop
+
+Java Code:
+import java.util.*;
+
+public class QuickSortExample {
+
+    public static int partition(int arr[], int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+
+        return i + 1;
+    }
+
+    public static void quickSort(int arr[], int low, int high) {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+
+        int[] arr = new int[n];
+
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        quickSort(arr, 0, n - 1);
+
+        System.out.println("Sorted Array:");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of elements: 5
+10 7 8 9 1
+
+Conclusion:
+Quick Sort efficiently sorts elements using divide-and-conquer strategy. It performs very fast on average but may degrade to O(n^2) in worst-case scenarios.
+
+=====================================================================
+PRACTICAL 15: Randomized Quick Sort
+
+Aim:
+To improve sorting efficiency using Randomized Quick Sort.
+
+Theory:
+Randomized Quick Sort is an optimized version of Quick Sort where the pivot is chosen randomly instead of always picking a fixed element (like first or last).
+
+This reduces the chances of encountering the worst-case scenario (O(n^2)).
+
+Working:
+- Randomly select a pivot
+- Partition the array around the pivot
+- Recursively apply the same process to subarrays
+
+Key Points:
+- Time Complexity:
+  - Best/Average: O(n log n)
+  - Worst: O(n^2) (rare due to randomness)
+- Space Complexity: O(log n)
+- Not stable
+- Reduces probability of worst-case
+
+Algorithm:
+1. Start
+2. Input number of elements (n)
+3. Input array elements
+4. Apply Randomized Quick Sort:
+   a. Select a random pivot index
+   b. Swap pivot with last element
+   c. Partition array
+   d. Recursively sort left and right parts
+5. Display sorted array
+6. Stop
+
+Java Code:
+import java.util.*;
+
+public class RandomizedQuickSort {
+
+    static Random rand = new Random();
+
+    public static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+
+        swap(arr, i + 1, high);
+        return i + 1;
+    }
+
+    public static int randomizedPartition(int[] arr, int low, int high) {
+        int randomIndex = low + rand.nextInt(high - low + 1);
+        swap(arr, randomIndex, high);
+        return partition(arr, low, high);
+    }
+
+    public static void randomizedQuickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pi = randomizedPartition(arr, low, high);
+
+            randomizedQuickSort(arr, low, pi - 1);
+            randomizedQuickSort(arr, pi + 1, high);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+
+        int[] arr = new int[n];
+
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        randomizedQuickSort(arr, 0, n - 1);
+
+        System.out.println("Sorted Array:");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of elements: 5
+10 7 8 9 1
+
+Conclusion:
+Randomized Quick Sort improves performance by reducing the likelihood of worst-case scenarios through random pivot selection, making it efficient for large datasets.
+
+=============================================================================
+PRACTICAL 16: Fractional Knapsack Problem
+
+Aim:
+To maximize profit by selecting items within capacity using the Fractional Knapsack approach.
+
+Theory:
+The Fractional Knapsack problem is a greedy algorithm problem where items can be divided into fractions to maximize total profit within a given capacity.
+
+In this approach:
+- Items are selected based on highest profit-to-weight ratio
+- Items can be taken fully or partially
+
+Greedy Strategy:
+At each step, select the item with the highest (profit/weight) ratio.
+
+Key Points:
+- Time Complexity: O(n log n) (due to sorting)
+- Space Complexity: O(n)
+- Items can be broken into fractions
+- Greedy approach gives optimal solution
+
+Algorithm:
+1. Start
+2. Input number of items (n)
+3. Input profit and weight of each item
+4. Calculate profit/weight ratio for each item
+5. Sort items in descending order of ratio
+6. Initialize total profit = 0
+7. For each item:
+   a. If weight ≤ capacity:
+       - Take whole item
+       - Reduce capacity
+   b. Else:
+       - Take fractional part
+       - Add proportional profit
+       - Break
+8. Display maximum profit
+9. Stop
+
+Java Code:
+import java.util.*;
+
+class Item {
+    int profit, weight;
+    double ratio;
+
+    Item(int profit, int weight) {
+        this.profit = profit;
+        this.weight = weight;
+        this.ratio = (double) profit / weight;
+    }
+}
+
+public class FractionalKnapsack {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of items: ");
+        int n = sc.nextInt();
+
+        Item[] items = new Item[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter profit and weight of item " + (i + 1) + ": ");
+            int p = sc.nextInt();
+            int w = sc.nextInt();
+            items[i] = new Item(p, w);
+        }
+
+        System.out.print("Enter knapsack capacity: ");
+        int capacity = sc.nextInt();
+
+        // Sort by ratio (descending)
+        Arrays.sort(items, (a, b) -> Double.compare(b.ratio, a.ratio));
+
+        double totalProfit = 0.0;
+
+        for (int i = 0; i < n; i++) {
+            if (capacity >= items[i].weight) {
+                capacity -= items[i].weight;
+                totalProfit += items[i].profit;
+            } else {
+                totalProfit += items[i].ratio * capacity;
+                break;
+            }
+        }
+
+        System.out.println("Maximum Profit: " + totalProfit);
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of items: 3
+60 10
+100 20
+120 30
+Enter knapsack capacity: 50
+
+Conclusion:
+Fractional Knapsack uses a greedy strategy to maximize profit by selecting items based on profit-to-weight ratio. It allows fractional selection, ensuring an optimal solution.
+
+===============================================================================
+PRACTICAL 17: Job Sequencing with Deadlines
+
+Aim:
+To schedule jobs to maximize profit within deadlines using job sequencing.
+
+Theory:
+Job Sequencing with Deadlines is a greedy algorithm problem where each job has:
+- A deadline
+- A profit
+
+Each job takes 1 unit of time, and only one job can be done at a time.
+
+Goal:
+Maximize total profit by scheduling jobs before their deadlines.
+
+Greedy Strategy:
+- Sort jobs in descending order of profit
+- Try to place each job in the latest available time slot before its deadline
+
+Key Points:
+- Time Complexity: O(n^2) (simple approach)
+- Space Complexity: O(n)
+- Uses greedy strategy
+- Not all jobs may be scheduled
+
+Algorithm:
+1. Start
+2. Input number of jobs (n)
+3. Input job id, deadline, and profit
+4. Sort jobs in descending order of profit
+5. Find maximum deadline to create slots
+6. Initialize slot array (all empty)
+7. For each job:
+   a. Check from its deadline to 1
+   b. If a free slot is found:
+       - Assign job to that slot
+       - Add profit
+       - Break
+8. Display scheduled jobs and total profit
+9. Stop
+
+Java Code:
+import java.util.*;
+
+class Job {
+    String id;
+    int deadline, profit;
+
+    Job(String id, int deadline, int profit) {
+        this.id = id;
+        this.deadline = deadline;
+        this.profit = profit;
+    }
+}
+
+public class JobSequencing {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of jobs: ");
+        int n = sc.nextInt();
+
+        Job[] jobs = new Job[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter job id, deadline, profit: ");
+            String id = sc.next();
+            int d = sc.nextInt();
+            int p = sc.nextInt();
+            jobs[i] = new Job(id, d, p);
+        }
+
+        // Sort jobs by profit (descending)
+        Arrays.sort(jobs, (a, b) -> b.profit - a.profit);
+
+        int maxDeadline = 0;
+        for (Job job : jobs) {
+            if (job.deadline > maxDeadline)
+                maxDeadline = job.deadline;
+        }
+
+        String[] slot = new String[maxDeadline + 1];
+        boolean[] occupied = new boolean[maxDeadline + 1];
+
+        int totalProfit = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = jobs[i].deadline; j > 0; j--) {
+                if (!occupied[j]) {
+                    slot[j] = jobs[i].id;
+                    occupied[j] = true;
+                    totalProfit += jobs[i].profit;
+                    break;
+                }
+            }
+        }
+
+        System.out.println("Scheduled Jobs:");
+        for (int i = 1; i <= maxDeadline; i++) {
+            if (occupied[i]) {
+                System.out.print(slot[i] + " ");
+            }
+        }
+
+        System.out.println("\nTotal Profit: " + totalProfit);
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of jobs: 5
+J1 2 100
+J2 1 19
+
+Conclusion:
+Job Sequencing uses a greedy approach to maximize profit by scheduling high-profit jobs within their deadlines efficiently.
+
+===========================================================================
+PRACTICAL 18: Minimum Spanning Tree using Kruskal’s Algorithm
+
+Aim:
+To construct a Minimum Spanning Tree (MST) using Kruskal’s algorithm.
+
+Theory:
+A Minimum Spanning Tree (MST) is a subset of edges of a connected, weighted graph that:
+- Connects all vertices
+- Has no cycles
+- Has minimum possible total edge weight
+
+Kruskal’s Algorithm is a greedy approach:
+- Sort all edges in increasing order of weight
+- Add edges one by one to the MST
+- Avoid cycles using Disjoint Set (Union-Find)
+
+Key Points:
+- Time Complexity: O(E log E)
+- Space Complexity: O(V)
+- Uses greedy strategy
+- Requires cycle detection
+
+Algorithm:
+1. Start
+2. Input number of vertices (V) and edges (E)
+3. Input edges (source, destination, weight)
+4. Sort edges in ascending order of weight
+5. Initialize parent array for Union-Find
+6. For each edge:
+   a. Find root of source and destination
+   b. If roots are different:
+       - Add edge to MST
+       - Union the sets
+7. Repeat until MST has (V-1) edges
+8. Display MST and total weight
+9. Stop
+
+Java Code:
+import java.util.*;
+
+class Edge implements Comparable<Edge> {
+    int src, dest, weight;
+
+    Edge(int s, int d, int w) {
+        src = s;
+        dest = d;
+        weight = w;
+    }
+
+    public int compareTo(Edge other) {
+        return this.weight - other.weight;
+    }
+}
+
+public class KruskalMST {
+
+    static int find(int parent[], int i) {
+        if (parent[i] != i)
+            parent[i] = find(parent, parent[i]);
+        return parent[i];
+    }
+
+    static void union(int parent[], int x, int y) {
+        int xRoot = find(parent, x);
+        int yRoot = find(parent, y);
+        parent[xRoot] = yRoot;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of vertices: ");
+        int V = sc.nextInt();
+
+        System.out.print("Enter number of edges: ");
+        int E = sc.nextInt();
+
+        Edge[] edges = new Edge[E];
+
+        for (int i = 0; i < E; i++) {
+            System.out.print("Enter src, dest, weight: ");
+            int s = sc.nextInt();
+            int d = sc.nextInt();
+            int w = sc.nextInt();
+            edges[i] = new Edge(s, d, w);
+        }
+
+        Arrays.sort(edges);
+
+        int[] parent = new int[V];
+        for (int i = 0; i < V; i++)
+            parent[i] = i;
+
+        int totalWeight = 0;
+        System.out.println("Edges in MST:");
+
+        int count = 0;
+        for (int i = 0; i < E && count < V - 1; i++) {
+            int x = find(parent, edges[i].src);
+            int y = find(parent, edges[i].dest);
+
+            if (x != y) {
+                System.out.println(edges[i].src + " - " + edges[i].dest + " : " + edges[i].weight);
+                totalWeight += edges[i].weight;
+                union(parent, x, y);
+                count++;
+            }
+        }
+
+        System.out.println("Total Weight of MST: " + totalWeight);
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of vertices: 4
+Enter number of edges: 5
+0 1 10
+1 2 6
+
+Conclusion:
+Kruskal’s Algorithm constructs a Minimum Spanning Tree efficiently using a greedy approach and union-find for cycle detection.
+
+======================================================================
+PRACTICAL 19: Minimum Spanning Tree using Prim’s Algorithm
+
+Aim:
+To build a minimum cost spanning tree using Prim’s algorithm.
+
+Theory:
+A Minimum Spanning Tree (MST) connects all vertices of a graph with minimum total edge weight and no cycles.
+
+Prim’s Algorithm is a greedy algorithm that:
+- Starts from any vertex
+- Grows the MST by adding the minimum weight edge that connects a visited vertex to an unvisited vertex
+
+It works similarly to Dijkstra but focuses on edge weights instead of shortest paths.
+
+Key Points:
+- Time Complexity: O(V^2) (simple implementation)
+- Space Complexity: O(V)
+- Greedy approach
+- Works well for dense graphs
+
+Algorithm:
+1. Start
+2. Input number of vertices (V)
+3. Input adjacency matrix of graph
+4. Initialize:
+   - key[] = ∞ for all vertices
+   - key[0] = 0 (start vertex)
+   - visited[] = false
+   - parent[] array
+5. Repeat V-1 times:
+   a. Select vertex with minimum key value not yet visited
+   b. Mark it as visited
+   c. Update key values of adjacent vertices
+6. Construct MST using parent array
+7. Display edges and total cost
+8. Stop
+
+Java Code:
+import java.util.*;
+
+public class PrimMST {
+
+    static int minKey(int key[], boolean visited[], int V) {
+        int min = Integer.MAX_VALUE, minIndex = -1;
+
+        for (int v = 0; v < V; v++) {
+            if (!visited[v] && key[v] < min) {
+                min = key[v];
+                minIndex = v;
+            }
+        }
+        return minIndex;
+    }
+
+    public static void primMST(int graph[][], int V) {
+        int[] parent = new int[V];
+        int[] key = new int[V];
+        boolean[] visited = new boolean[V];
+
+        Arrays.fill(key, Integer.MAX_VALUE);
+        key[0] = 0;
+        parent[0] = -1;
+
+        for (int count = 0; count < V - 1; count++) {
+            int u = minKey(key, visited, V);
+            visited[u] = true;
+
+            for (int v = 0; v < V; v++) {
+                if (graph[u][v] != 0 && !visited[v] && graph[u][v] < key[v]) {
+                    parent[v] = u;
+                    key[v] = graph[u][v];
+                }
+            }
+        }
+
+        int totalCost = 0;
+        System.out.println("Edges in MST:");
+
+        for (int i = 1; i < V; i++) {
+            System.out.println(parent[i] + " - " + i + " : " + graph[i][parent[i]]);
+            totalCost += graph[i][parent[i]];
+        }
+
+        System.out.println("Total Cost: " + totalCost);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of vertices: ");
+        int V = sc.nextInt();
+
+        int[][] graph = new int[V][V];
+
+        System.out.println("Enter adjacency matrix:");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                graph[i][j] = sc.nextInt();
+            }
+        }
+
+        primMST(graph, V);
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of vertices: 4
+Enter adjacency matrix:
+0 2 0 6
+2 0 3 8
+
+Conclusion:
+Prim’s Algorithm constructs a Minimum Spanning Tree by growing it vertex by vertex using the smallest edge, making it efficient for dense graphs.
+
+==========================================================================
+PRACTICAL 20: Shortest Path using Dijkstra’s Algorithm
+
+Aim:
+To find the shortest path from a source node to all other nodes using Dijkstra’s algorithm.
+
+Theory:
+Dijkstra’s Algorithm is a greedy algorithm used to find the shortest path from a source vertex to all other vertices in a weighted graph with non-negative edge weights.
+
+It works by:
+- Selecting the vertex with the minimum distance
+- Updating distances to its adjacent vertices
+
+Key Points:
+- Time Complexity: O(V^2) (simple implementation)
+- Space Complexity: O(V)
+- Greedy algorithm
+- Works only with non-negative weights
+
+Algorithm:
+1. Start
+2. Input number of vertices (V)
+3. Input adjacency matrix
+4. Initialize:
+   - dist[] = ∞ for all vertices
+   - dist[source] = 0
+   - visited[] = false
+5. Repeat V-1 times:
+   a. Select vertex with minimum distance not visited
+   b. Mark it as visited
+   c. Update distances of adjacent vertices:
+       if dist[u] + weight < dist[v], update dist[v]
+6. Display shortest distances from source
+7. Stop
+
+Java Code:
+import java.util.*;
+
+public class DijkstraAlgorithm {
+
+    static int minDistance(int dist[], boolean visited[], int V) {
+        int min = Integer.MAX_VALUE, minIndex = -1;
+
+        for (int v = 0; v < V; v++) {
+            if (!visited[v] && dist[v] <= min) {
+                min = dist[v];
+                minIndex = v;
+            }
+        }
+        return minIndex;
+    }
+
+    public static void dijkstra(int graph[][], int V, int src) {
+        int[] dist = new int[V];
+        boolean[] visited = new boolean[V];
+
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+
+        for (int count = 0; count < V - 1; count++) {
+            int u = minDistance(dist, visited, V);
+            visited[u] = true;
+
+            for (int v = 0; v < V; v++) {
+                if (!visited[v] && graph[u][v] != 0 &&
+                    dist[u] != Integer.MAX_VALUE &&
+                    dist[u] + graph[u][v] < dist[v]) {
+                    dist[v] = dist[u] + graph[u][v];
+                }
+            }
+        }
+
+        System.out.println("Shortest distances from source:");
+        for (int i = 0; i < V; i++) {
+            System.out.println("Vertex " + i + " : " + dist[i]);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of vertices: ");
+        int V = sc.nextInt();
+
+        int[][] graph = new int[V][V];
+
+        System.out.println("Enter adjacency matrix:");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                graph[i][j] = sc.nextInt();
+            }
+        }
+
+        System.out.print("Enter source vertex: ");
+        int src = sc.nextInt();
+
+        dijkstra(graph, V, src);
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter number of vertices: 4
+Enter adjacency matrix:
+0 1 4 0
+1 0 2 6
+4 2 0 3
+0 6 3 0
+Enter source vertex: 0
+
+Conclusion:
+Dijkstra’s Algorithm efficiently finds the shortest path from a source node to all other nodes in a graph with non-negative edge weights.
+
+==========================================================================
+PRACTICAL 21: N-Queens Problem using Backtracking
+
+Aim:
+To place N queens on an N×N chessboard such that no two queens attack each other using backtracking.
+
+Theory:
+The N-Queens problem is a classic backtracking problem where N queens must be placed on an N×N chessboard so that:
+- No two queens share the same row
+- No two queens share the same column
+- No two queens share the same diagonal
+
+Backtracking:
+It is a recursive approach that tries to build a solution step by step. If a conflict occurs, it backtracks and tries another possibility.
+
+Key Points:
+- Time Complexity: O(N!)
+- Uses recursion and backtracking
+- Not a dynamic programming problem
+- Explores all possible configurations
+
+Algorithm:
+1. Start
+2. Input value of N
+3. Initialize N×N chessboard
+4. Define function to check if placing a queen is safe:
+   - Check column
+   - Check left diagonal
+   - Check right diagonal
+5. Place queens row by row:
+   a. For each column in current row:
+       - If safe, place queen
+       - Recur for next row
+       - If failure, remove queen (backtrack)
+6. If all queens placed, display solution
+7. Stop
+
+Java Code:
+import java.util.*;
+
+public class NQueens {
+
+    static int N;
+
+    static boolean isSafe(int[][] board, int row, int col) {
+        for (int i = 0; i < row; i++)
+            if (board[i][col] == 1)
+                return false;
+
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+            if (board[i][j] == 1)
+                return false;
+
+        for (int i = row, j = col; i >= 0 && j < N; i--, j++)
+            if (board[i][j] == 1)
+                return false;
+
+        return true;
+    }
+
+    static boolean solveNQ(int[][] board, int row) {
+        if (row == N)
+            return true;
+
+        for (int col = 0; col < N; col++) {
+            if (isSafe(board, row, col)) {
+                board[row][col] = 1;
+
+                if (solveNQ(board, row + 1))
+                    return true;
+
+                board[row][col] = 0; // backtrack
+            }
+        }
+        return false;
+    }
+
+    static void printSolution(int[][] board) {
+        System.out.println("Solution:");
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter value of N: ");
+        N = sc.nextInt();
+
+        int[][] board = new int[N][N];
+
+        if (solveNQ(board, 0))
+            printSolution(board);
+        else
+            System.out.println("No solution exists");
+
+        sc.close();
+    }
+}
+
+Sample Input:
+Enter value of N: 4
+
+Conclusion:
+The N-Queens problem is efficiently solved using backtracking by exploring possible placements and undoing choices when conflicts occur.
+
+==================================================================
+PRACTICAL 22: 8-Queens Problem (Optimized Approach)
+
+Aim:
+To place 8 queens on a chessboard such that no two queens attack each other using an optimized backtracking approach.
+
+Theory:
+The 8-Queens problem is a special case of the N-Queens problem where N = 8.
+
+The objective is:
+- No two queens share the same row, column, or diagonal
+
+Optimized Approach:
+Instead of checking the entire board repeatedly, we use arrays to track:
+- Columns occupied
+- Left diagonals (row - col)
+- Right diagonals (row + col)
+
+This reduces unnecessary checks and improves performance.
+
+Key Points:
+- Time Complexity: O(N!)
+- Uses backtracking with optimization
+- Faster than naive approach due to reduced checking
+- Not a dynamic programming problem
+
+Algorithm:
+1. Start
+2. Set N = 8
+3. Initialize:
+   - board[N][N]
+   - column[], diag1[], diag2[]
+4. Define recursive function:
+   a. If row == N → solution found
+   b. For each column:
+       - Check if safe using arrays
+       - Place queen
+       - Mark arrays
+       - Recur for next row
+       - Backtrack (unmark)
+5. Display solution
+6. Stop
+
+Java Code:
+import java.util.*;
+
+public class EightQueens {
+
+    static int N = 8;
+    static int[][] board = new int[N][N];
+    static boolean[] col = new boolean[N];
+    static boolean[] diag1 = new boolean[2 * N];
+    static boolean[] diag2 = new boolean[2 * N];
+
+    static boolean solve(int row) {
+        if (row == N)
+            return true;
+
+        for (int c = 0; c < N; c++) {
+            if (!col[c] && !diag1[row - c + N] && !diag2[row + c]) {
+                board[row][c] = 1;
+                col[c] = diag1[row - c + N] = diag2[row + c] = true;
+
+                if (solve(row + 1))
+                    return true;
+
+                board[row][c] = 0;
+                col[c] = diag1[row - c + N] = diag2[row + c] = false;
+            }
+        }
+        return false;
+    }
+
+    static void printBoard() {
+        System.out.println("Solution:");
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        if (solve(0))
+            printBoard();
+        else
+            System.out.println("No solution exists");
+    }
+}
+
+Conclusion:
+The 8-Queens problem is efficiently solved using an optimized backtracking approach by reducing repeated checks through auxiliary arrays.
+
+=========================================================================
+PRACTICAL 23: 4-Queens Problem
+
+Aim:
+To place 4 queens on a 4×4 chessboard such that no two queens attack each other using an efficient algorithmic approach.
+
+Theory:
+The 4-Queens problem is a specific case of the N-Queens problem where N = 4.
+
+Objective:
+- No two queens should be in the same row
+- No two queens should be in the same column
+- No two queens should be in the same diagonal
+
+Approach:
+Backtracking is used to explore all possible placements and backtrack when a conflict occurs.
+
+Key Points:
+- Time Complexity: O(N!)
+- Uses backtracking
+- Efficient for small N
+- Not a dynamic programming problem
+
+Algorithm:
+1. Start
+2. Set N = 4
+3. Initialize board[N][N]
+4. Define function to check safety:
+   - Check column
+   - Check left diagonal
+   - Check right diagonal
+5. Place queens row by row:
+   a. For each column:
+       - If safe, place queen
+       - Recur for next row
+       - If failure, remove queen (backtrack)
+6. If all queens placed, display solution
+7. Stop
+
+Java Code:
+import java.util.*;
+
+public class FourQueens {
+
+    static int N = 4;
+
+    static boolean isSafe(int[][] board, int row, int col) {
+        for (int i = 0; i < row; i++)
+            if (board[i][col] == 1)
+                return false;
+
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+            if (board[i][j] == 1)
+                return false;
+
+        for (int i = row, j = col; i >= 0 && j < N; i--, j++)
+            if (board[i][j] == 1)
+                return false;
+
+        return true;
+    }
+
+    static boolean solve(int[][] board, int row) {
+        if (row == N)
+            return true;
+
+        for (int col = 0; col < N; col++) {
+            if (isSafe(board, row, col)) {
+                board[row][col] = 1;
+
+                if (solve(board, row + 1))
+                    return true;
+
+                board[row][col] = 0; // backtrack
+            }
+        }
+        return false;
+    }
+
+    static void printBoard(int[][] board) {
+        System.out.println("Solution:");
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        int[][] board = new int[N][N];
+
+        if (solve(board, 0))
+            printBoard(board);
+        else
+            System.out.println("No solution exists");
+    }
+}
+
+Conclusion:
+The 4-Queens problem is solved using backtracking by placing queens safely and backtracking when conflicts occur.
