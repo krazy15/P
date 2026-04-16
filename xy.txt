@@ -1,0 +1,821 @@
+1)Rank students for admission by sorting scores using Bubble Sort and display top 10 candidates.
+import java.util.Scanner;
+public class Main{
+    public static void main(String[] args){
+        Scanner sc =new Scanner(System.in);
+        System.out.println("Enter the number of students");
+        int n=sc.nextInt();
+        String[] names=new String[n];
+        int[] marks=new int[n];
+        for(int i=0;i<n;i++){
+            System.out.println("Enter the name of Student");
+            names[i]=sc.next();
+            System.out.println("WEnter the marks of Student");
+            marks[i]=sc.nextInt();
+        }
+        for(int i=0;i<n-1;i++){
+            for(int j=0;j<n-i-1;j++){
+                if (marks[j]<marks[j+1]){
+                    int t=marks[j];
+                    marks[j]=marks[j+1];
+                    marks[j+1]=t;
+                    String s=names[j];
+                    names[j]=names[j+1];
+                    names[j+1]=s;
+                }
+            }
+        }
+        for(int i=0;i<n && i<10;i++){
+            System.out.println((i+1)+"."+names[i]+" -"+marks[i]);
+        }
+
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------
+2)Shortlist internship candidates by sorting test scores using Selection Sort and display top 10 students.
+import java.util.Scanner;
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of Candidates: ");
+		int n=sc.nextInt();
+		String[] names=new String[n];
+		int[] marks=new int[n];
+		for(int i=0;i<n;i++) {
+			System.out.println("Enter the name of Candidate: ");
+			names[i]=sc.next();
+			System.out.println("Enter the marks of Candidate: ");
+			marks[i]=sc.nextInt();
+		}
+		for(int i=0;i<n-1;i++) {
+			int max=i;
+			for(int j=i+1;j<n;j++) {
+				if (marks[j]>marks[max]) {
+					max=j;
+				}
+			}
+			int t=marks[i];
+			marks[i]=marks[max];
+			marks[max]=t;
+			String s=names[i];
+			names[i]=names[max];
+			names[max]=s;
+		}
+		for(int i=0;i<n && i<10;i++) {
+			System.out.println((i+1)+"."+names[i]+"-"+marks[i]);
+		}
+	}
+}
+--------------------------------------------------------------------------------------------------------------------------
+3)Generate a competitive exam leaderboard by sorting scores using Insertion Sort and display top 10 rank holders.
+import java.util.Scanner;
+public class Main{
+    public static void main(String[] args){
+        Scanner sc =new Scanner(System.in);
+        System.out.println("Enter the number of students");
+        int n=sc.nextInt();
+        String[] names=new String[n];
+        int[] scores=new int[n];
+        for(int i=0;i<n;i++){
+            System.out.println("Enter the name of Student");
+            names[i]=sc.next();
+            System.out.println("WEnter the scores of Student");
+            scores[i]=sc.nextInt();
+        }
+        for (int i = 1; i < n; i++) {
+            int key = scores[i];
+            String name = names[i];
+            int j = i - 1;
+            while (j >= 0 && scores[j] < key) {
+                scores[j + 1] = scores[j];
+                names[j + 1] = names[j];
+                j--;
+            }
+            scores[j + 1] = key;
+            names[j + 1] = name;
+        }
+        for (int i = 0; i < n && i < 10; i++) {
+            System.out.println((i + 1) + ". " + names[i] + " - " + scores[i]);
+        }
+
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------
+
+4)Identify placement-eligible students by sorting aptitude scores using Bubble Sort and display top performers.
+import java.util.Scanner;
+public class Main{
+    public static void main(String[] args){
+        Scanner sc =new Scanner(System.in);
+        System.out.println("Enter the number of students");
+        int n=sc.nextInt();
+        String[] names=new String[n];
+        int[] marks=new int[n];
+        for(int i=0;i<n;i++){
+            System.out.println("Enter the name of Student");
+            names[i]=sc.next();
+            System.out.println("WEnter the marks of Student");
+            marks[i]=sc.nextInt();
+        }
+        for(int i=0;i<n-1;i++){
+            for(int j=0;j<n-i-1;j++){
+                if (marks[j]<marks[j+1]){
+                    int t=marks[j];
+                    marks[j]=marks[j+1];
+                    marks[j+1]=t;
+                    String s=names[j];
+                    names[j]=names[j+1];
+                    names[j+1]=s;
+                }
+            }
+        }
+        System.out.print("Enter minimum score for eligibility: ");
+        int cutoff = sc.nextInt();
+        System.out.println("\nPlacement Eligible Students:");
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (marks[i] >= cutoff) {
+                System.out.println((count+1)+"."+names[i]+"-"+marks[i]);
+                count++;
+            }
+        }
+        if (count == 0) {
+            System.out.println("No students are eligible.");
+        }
+        sc.close();
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+5)Rank learners on an online platform by sorting quiz scores using Selection Sort and display top 10 learners.
+import java.util.Scanner;
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of Learners: ");
+		int n=sc.nextInt();
+		String[] names=new String[n];
+		int[] marks=new int[n];
+		for(int i=0;i<n;i++) {
+			System.out.println("Enter the name of Learners: ");
+			names[i]=sc.next();
+			System.out.println("Enter the marks of Learners: ");
+			marks[i]=sc.nextInt();
+		}
+		for(int i=0;i<n-1;i++) {
+			int max=i;
+			for(int j=i+1;j<n;j++) {
+				if (marks[j]>marks[max]) {
+					max=j;
+				}
+			}
+			int t=marks[i];
+			marks[i]=marks[max];
+			marks[max]=t;
+			String s=names[i];
+			names[i]=names[max];
+			names[max]=s;
+		}
+        // Display Top 10 Learners
+        System.out.println("Top Learners:");
+        for (int i = 0; i < n && i < 10; i++) {
+            System.out.println((i + 1) + ". " + learners[i] + " - " + scores[i]);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------
+
+6)Select top athletes by sorting performance scores using Insertion Sort and display top 10 players.
+import java.util.Scanner;
+public class Main{
+    public static void main(String[] args){
+        Scanner sc =new Scanner(System.in);
+        System.out.println("Enter the number of athletes");
+        int n=sc.nextInt();
+        String[] names=new String[n];
+        int[] scores=new int[n];
+        for(int i=0;i<n;i++){
+            System.out.println("Enter the name of Athelete");
+            names[i]=sc.next();
+            System.out.println("Enter the scores of athletes");
+            scores[i]=sc.nextInt();
+        }
+        for (int i = 1; i < n; i++) {
+            int key = scores[i];
+            String name = names[i];
+            int j = i - 1;
+            while (j >= 0 && scores[j] < key) {
+                scores[j + 1] = scores[j];
+                names[j + 1] = names[j];
+                j--;
+            }
+            scores[j + 1] = key;
+            names[j + 1] = name;
+        }
+        System.out.println("\nTop 10 Athletes:");
+        int limit = Math.min(10, n);
+        for (int i = 0; i < limit; i++) {
+            System.out.println((i + 1) + ". " + names[i] + " - " + scores[i]);
+        }
+        sc.close();
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------
+
+7)Arrange library books by sorting accession numbers using Insertion Sort and display the ordered list.
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter number of books:");
+        int n = sc.nextInt();
+        int[] accNo = new int[n];
+        for (int i = 0; i < n; i++) {
+            System.out.println("Enter accession number:");
+            accNo[i] = sc.nextInt();
+        }
+        for (int i = 1; i < n; i++) {
+            int key = accNo[i];
+            int j = i - 1;
+            while (j >= 0 && accNo[j] > key) {
+                accNo[j + 1] = accNo[j];
+                j--;
+            }
+            accNo[j + 1] = key;
+        }
+        System.out.println("\nOrdered Accession Numbers:");
+        for (int i = 0; i < n; i++) {
+            System.out.print(accNo[i] + " ");
+        }
+        sc.close();
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------
+8)Find the greatest common divisor (GCD) of two numbers to simplify ratios.
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter two numbers: ");
+        int a = sc.nextInt();
+        int b = sc.nextInt();
+        int x = a, y = b;
+        while (y != 0) {
+            int temp = y;
+            y = x % y;
+            x = temp;
+        }
+        System.out.println("GCD = " + x);
+        System.out.println("Simplified Ratio = " + (a / x) + ":" + (b / x));
+
+        sc.close();
+    }
+}------------------------------------------------------------------------------------------------------------------------------
+9)Generate Fibonacci sequence to model progressive growth patterns.
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of terms: ");
+        int n = sc.nextInt();
+        int a = 0, b = 1;
+        System.out.println("Fibonacci Sequence:");
+        for (int i = 0; i < n; i++) {
+            System.out.print(a + " ");
+            int next = a + b;
+            a = b;
+            b = next;
+        }
+        sc.close();
+    }
+}
+-------------------------------------------------------------------------------------------------------------------
+10)Search for a specific element in an unsorted list using sequential search.
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter element: ");
+            arr[i] = sc.nextInt();
+        }
+        System.out.print("Enter element to search: ");
+        int key = sc.nextInt();
+        boolean found = false;
+        for (int i = 0; i < n; i++) {
+            if (arr[i] == key) {
+                System.out.println("Element found at position " + (i + 1));
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Element not found");
+        }
+        sc.close();
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------
+11)Locate a target element in a sorted array using binary search.
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        System.out.println("Enter sorted elements:");
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+        System.out.print("Enter element to search: ");
+        int key = sc.nextInt();
+        int low = 0, high = n - 1;
+        boolean found = false;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (arr[mid] == key) {
+                System.out.println("Element found at position " + (mid + 1));
+                found = true;
+                break;
+            } 
+            else if (arr[mid] < key) {
+                low = mid + 1;
+            } 
+            else {
+                high = mid - 1;
+            }
+        }
+        if (!found) {
+            System.out.println("Element not found");
+        }
+        sc.close();
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------
+12)Sort a list of elements efficiently using merge sort.
+import java.util.Scanner;
+public class Main {
+    static void merge(int[] arr, int l, int m, int r) {
+        int n1 = m - l + 1;
+        int n2 = r - m;
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+        for (int i = 0; i < n1; i++)
+            L[i] = arr[l + i];
+        for (int j = 0; j < n2; j++)
+            R[j] = arr[m + 1 + j];
+        int i = 0, j = 0, k = l;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j])
+                arr[k++] = L[i++];
+            else
+                arr[k++] = R[j++];
+        }
+        while (i < n1)
+            arr[k++] = L[i++];
+        while (j < n2)
+            arr[k++] = R[j++];
+    }
+    static void mergeSort(int[] arr, int l, int r) {
+        if (l < r) {
+            int m = (l + r) / 2;
+            mergeSort(arr, l, m);
+            mergeSort(arr, m + 1, r);
+            merge(arr, l, m, r);
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n; i++)
+            arr[i] = sc.nextInt();
+        mergeSort(arr, 0, n - 1);
+        System.out.println("Sorted Array:");
+        for (int i = 0; i < n; i++)
+            System.out.print(arr[i] + " ");
+        sc.close();
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------
+
+13)Arrange elements based on priority using heap sort.
+import java.util.Scanner;
+public class Main {
+    static void heapify(int[] arr, int n, int i) {
+        int largest = i;      // root
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+        if (largest != i) {
+            int temp = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = temp;
+            heapify(arr, n, largest);
+        }
+    }
+    static void heapSort(int[] arr, int n) {
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify(arr, n, i);
+        for (int i = n - 1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            heapify(arr, i, 0);
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n; i++)
+            arr[i] = sc.nextInt();
+        heapSort(arr, n);
+        System.out.println("Sorted Elements:");
+        for (int i = 0; i < n; i++)
+            System.out.print(arr[i] + " ");
+        sc.close();
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------
+
+14)Sort a dataset quickly using quick sort algorithm.
+import java.util.Scanner;
+public class Main {
+    static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];   // last element as pivot
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+        return i + 1;
+    }
+    static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n; i++)
+            arr[i] = sc.nextInt();
+        quickSort(arr, 0, n - 1);
+        System.out.println("Sorted Array:");
+        for (int i = 0; i < n; i++)
+            System.out.print(arr[i] + " ");
+        sc.close();
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------
+15)Improve sorting efficiency using randomized quick sort.
+import java.util.*;
+public class Main {
+    static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                int t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+            }
+        }
+        int t = arr[i + 1]; arr[i + 1] = arr[high]; arr[high] = t;
+        return i + 1;
+    }
+    static int randomPartition(int[] arr, int low, int high) {
+        int pivotIndex = low + new Random().nextInt(high - low + 1);
+        int t = arr[pivotIndex];
+        arr[pivotIndex] = arr[high];
+        arr[high] = t;
+        return partition(arr, low, high);
+    }
+    static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pi = randomPartition(arr, low, high);
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of elements: ");
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n; i++)
+            arr[i] = sc.nextInt();
+        quickSort(arr, 0, n - 1);
+
+        System.out.println("Sorted Array:");
+        for (int x : arr)
+            System.out.print(x + " ");
+        sc.close();
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+16)Maximize profit by selecting items within capacity using fractional knapsack.
+import java.util.*;
+class Item {
+    int weight, profit;
+    double ratio;
+    Item(int w, int p) {
+        weight = w;
+        profit = p;
+        ratio = (double) p / w;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int[] w = {10, 20, 30};
+        int[] p = {60, 100, 120};
+        int capacity = 50;
+        int n = w.length;
+        Item[] items = new Item[n];
+        for (int i = 0; i < n; i++)
+            items[i] = new Item(w[i], p[i]);
+        Arrays.sort(items, (a, b) -> Double.compare(b.ratio, a.ratio));
+        double maxProfit = 0;
+        for (Item it : items) {
+            if (capacity >= it.weight) {
+                capacity -= it.weight;
+                maxProfit += it.profit;
+            } else {
+                maxProfit += it.ratio * capacity;
+                break;
+            }
+        }
+        System.out.println("Maximum Profit = " + maxProfit);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+17)Schedule jobs to maximize profit within deadlines using job sequencing.
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        int[] profit = {100, 19, 27, 25, 15};
+        int[] deadline = {2, 1, 2, 1, 3};
+        int n = profit.length;
+        for (int i = 0; i < n - 1; i++)
+            for (int j = i + 1; j < n; j++)
+                if (profit[i] < profit[j]) {
+                    int tp = profit[i]; profit[i] = profit[j]; profit[j] = tp;
+                    int td = deadline[i]; deadline[i] = deadline[j]; deadline[j] = td;
+                }
+        int maxD = 0;
+        for (int d : deadline)
+            if (d > maxD) maxD = d;
+        int[] slot = new int[maxD];
+        Arrays.fill(slot, -1);
+        int totalProfit = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = deadline[i] - 1; j >= 0; j--) {
+                if (slot[j] == -1) {
+                    slot[j] = i;
+                    totalProfit += profit[i];
+                    break;
+                }
+            }
+        }
+        System.out.println("Maximum Profit = " + totalProfit);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+18)Construct a minimum spanning tree using Kruskal’s algorithm.Build a minimum cost spanning tree using Prim’s algorithm.
+import java.util.*;
+class Edge {
+    int u, v, w;
+    Edge(int u, int v, int w) {
+        this.u = u; this.v = v; this.w = w;
+    }
+}
+public class Main {
+    static int find(int parent[], int i) {
+        if (parent[i] == i) return i;
+        return parent[i] = find(parent, parent[i]);
+    }
+    static void union(int parent[], int x, int y) {
+        parent[find(parent, x)] = find(parent, y);
+    }
+    public static void main(String[] args) {
+        int V = 4;
+        Edge[] edges = {
+            new Edge(0, 1, 10),
+            new Edge(0, 2, 6),
+            new Edge(0, 3, 5),
+            new Edge(1, 3, 15),
+            new Edge(2, 3, 4)
+        };
+        Arrays.sort(edges, (a, b) -> a.w - b.w);
+        int[] parent = new int[V];
+        for (int i = 0; i < V; i++) parent[i] = i;
+        int total = 0;
+        for (Edge e : edges) {
+            int x = find(parent, e.u);
+            int y = find(parent, e.v);
+            if (x != y) {
+                System.out.println(e.u + " - " + e.v + " : " + e.w);
+                total += e.w;
+                union(parent, x, y);
+            }
+        }
+        System.out.println("Total Weight = " + total);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+19)Build a minimum cost spanning tree using Prim’s algorithm.
+public class Main {
+    public static void main(String[] args) {
+        int[][] g = {
+            {0, 10, 6, 5},
+            {10, 0, 0, 15},
+            {6, 0, 0, 4},
+            {5, 15, 4, 0}
+        };
+        int V = 4;
+        boolean[] vis = new boolean[V];
+        vis[0] = true;
+        int edges = 0, cost = 0;
+        while (edges < V - 1) {
+            int min = 999, x = 0, y = 0;
+            for (int i = 0; i < V; i++) {
+                if (vis[i]) {
+                    for (int j = 0; j < V; j++) {
+                        if (!vis[j] && g[i][j] != 0 && g[i][j] < min) {
+                            min = g[i][j];
+                            x = i;
+                            y = j;
+                        }
+                    }
+                }
+            }
+            System.out.println(x + " - " + y + " : " + min);
+            cost += min;
+            vis[y] = true;
+            edges++;
+        }
+        System.out.println("Total Cost = " + cost);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+20)Find the shortest path from a source node using Dijkstra’s algorithm.
+public class Main {
+    public static void main(String[] args) {
+        int[][] g = {
+            {0, 10, 0, 5},
+            {10, 0, 1, 2},
+            {0, 1, 0, 9},
+            {5, 2, 9, 0}
+        };
+        int V = 4;
+        int[] dist = new int[V];
+        boolean[] vis = new boolean[V];
+        for (int i = 0; i < V; i++) dist[i] = 999;
+        dist[0] = 0; // source = 0
+        for (int i = 0; i < V - 1; i++) {
+            int u = -1, min = 999;
+            for (int j = 0; j < V; j++)
+                if (!vis[j] && dist[j] < min) {
+                    min = dist[j];
+                    u = j;
+                }
+            vis[u] = true;
+            for (int v = 0; v < V; v++)
+                if (!vis[v] && g[u][v] != 0 && dist[u] + g[u][v] < dist[v])
+                    dist[v] = dist[u] + g[u][v];
+        }
+        System.out.println("Shortest distances from source:");
+        for (int i = 0; i < V; i++)
+            System.out.println("0 -> " + i + " = " + dist[i]);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+21)Solve the N-Queens problem using dynamic programming concepts to place N queens on an N×N chessboard such that no two queens attack each other.
+public class Main {
+    static int N = 4;
+    static boolean isSafe(int board[][], int row, int col) {
+        for (int i = 0; i < col; i++)
+            if (board[row][i] == 1) return false;
+        for (int i=row, j=col; i>=0 && j>=0; i--, j--)
+            if (board[i][j] == 1) return false;
+        for (int i=row, j=col; j>=0 && i<N; i++, j--)
+            if (board[i][j] == 1) return false;
+        return true;
+    }
+    static boolean solve(int board[][], int col) {
+        if (col >= N) return true;
+        for (int i = 0; i < N; i++) {
+            if (isSafe(board, i, col)) {
+                board[i][col] = 1;
+                if (solve(board, col + 1)) return true;
+                board[i][col] = 0; // backtrack
+            }
+        }
+        return false;
+    }
+    public static void main(String[] args) {
+        int[][] board = new int[N][N];
+        if (solve(board, 0)) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++)
+                    System.out.print(board[i][j] + " ");
+                System.out.println();
+            }
+        } else {
+            System.out.println("No solution");
+        }
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+22)Implement a solution for the 8-Queens problem to place 8 queens on a chessboard without conflicts using an optimized approach.
+public class Main {
+    static int N = 8;
+    static int[] col = new int[N]; // col[i] = column of queen in row i
+    static boolean isSafe(int r) {
+        for (int i = 0; i < r; i++) {
+            if (col[i] == col[r] || Math.abs(col[i] - col[r]) == Math.abs(i - r))
+                return false;
+        }
+        return true;
+    }
+    static boolean solve(int r) {
+        if (r == N) return true;
+        for (int c = 0; c < N; c++) {
+            col[r] = c;
+            if (isSafe(r) && solve(r + 1))
+                return true;
+        }
+        return false;
+    }
+    public static void main(String[] args) {
+        if (solve(0)) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++)
+                    System.out.print(col[i] == j ? "Q " : ". ");
+                System.out.println();
+            }
+        } else {
+            System.out.println("No solution");
+        }
+    }
+}
+------------------------------------------------------------------------------------------------------------------------
+23)Place 4 queens on a 4×4 chessboard such that no two queens attack each other using an efficient algorithmic approach
+ZeuS [PHAS],  — 21:43
+public class Main {
+    static int N = 4;
+    static int[] col = new int[N];
+    static boolean isSafe(int r) {
+        for (int i = 0; i < r; i++) {
+            if (col[i] == col[r] || Math.abs(col[i] - col[r]) == Math.abs(i - r))
+                return false;
+        }
+        return true;
+    }
+    static boolean solve(int r) {
+        if (r == N) return true;
+        for (int c = 0; c < N; c++) {
+            col[r] = c;
+            if (isSafe(r) && solve(r + 1))
+                return true;
+        }
+        return false;
+    }
+    public static void main(String[] args) {
+        if (solve(0)) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++)
+                    System.out.print(col[i] == j ? "Q " : ". ");
+                System.out.println();
+            }
+        } else {
+            System.out.println("No solution");
+        }
+    }
+}
